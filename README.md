@@ -14,3 +14,14 @@ The backend service is a custom AWS Lambda server that will handle authenticatio
 
 ### Sendou.ink API
 The Sendou.ink API is the service that will be queried in order to obtain all information regarding a streamer's SendouQ activity. 
+
+### User Authentication
+- Within the extension configuration settings, we will provide a "Link Sendou.ink account" option. This will open a new tab for an OAuth login. This OAuth login could be directly from Sendou.ink, but if such a service doesn't exist and doesn't have any need to exist outside of this extension, we could simply perform this OAuth login using Discord(since Sendou.ink profiles are linked to Discord accounts). Then, with this Discord OAuth we can successfully connect the user to their Sendou.ink account.
+- Upon connecting a Sendou.ink account to the extension, the backend will receive the callback and obtain the corresponding Sendou.ink user ID. Then, we'll map each Twitch channel ID to the corresponding Sendou.ink user ID in our database for easy lookup.
+- On the frontend, we'll use window.Twitch.ext.onAuthorized to obtain the channelId and userId. The extension will then pass the JWT whenever fetching data from the backend for secure requests.
+
+### Data Fetching
+
+## Design
+### Frontend
+### Backend
