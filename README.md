@@ -21,6 +21,17 @@ The Sendou.ink API is the service that will be queried in order to obtain all in
 - On the frontend, we'll use window.Twitch.ext.onAuthorized to obtain the channelId and userId. The extension will then pass the JWT whenever fetching data from the backend for secure requests.
 
 ### Data Fetching
+Fetching data can be done in two different ways, either through a backend polling and websocket push approach, or a double websocket push approach.
+
+#### Backend Polling + Websocket Push
+- In this approach, the backend loops through each active streamer and polls Sendou.ink for their SendouQ data periodically. We note here that the last result for each active streamer is cached. 
+- The frontend will maintain a WebSocket connection to the backend and listen for any changes for a specific streamer's SendouQ activity.
+- When the backend detects a change during a poll from Sendou.ink, it will push the new data to the frontend for the specific twitch streamer's viewers to see.
+  - In the case that a poll is made from the backend to Sendou.ink and there is no change from the cached result, nothing will be pushed to the frontend for that channel.
+ 
+### Double Websocket Push
+- This approach relies on Sendou.ink providing webhooks for SendouQ updates, here the backend subscribes to these webhooks for the individual streamer.
+- The following details work the same as in the "Backend Polling + Websocket Push" method.
 
 ## Design
 ### Frontend
