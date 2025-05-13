@@ -24,7 +24,7 @@ The Sendou.ink API is the service that will be queried in order to obtain all in
 Fetching data can be done in two different ways, either through a backend polling and websocket push approach, or a double websocket push approach.
 
 #### Backend Polling + Websocket Push
-- In this approach, the backend loops through each active streamer and polls Sendou.ink for their SendouQ data periodically. We note here that the last result for each active streamer is cached. 
+- In this approach, the backend loops through each active streamer and polls Sendou.ink for their SendouQ data periodically(every 30/45s). We note here that the last result for each active streamer is cached. 
 - The frontend will maintain a WebSocket connection to the backend and listen for any changes for a specific streamer's SendouQ activity.
 - When the backend detects a change during a poll from Sendou.ink, it will push the new data to the frontend for the specific twitch streamer's viewers to see.
   - In the case that a poll is made from the backend to Sendou.ink and there is no change from the cached result, nothing will be pushed to the frontend for that channel.
