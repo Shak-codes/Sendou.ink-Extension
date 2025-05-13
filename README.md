@@ -35,5 +35,3 @@ Fetching data can be done in two different ways, either through a backend pollin
 - When Sendou.ink pushes a change to the backend, the backend will push the new data to the frontend for the specific twitch streamer's viewers to see.
 
 ## Design
-### Frontend
-### Backend
