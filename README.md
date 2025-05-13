@@ -31,7 +31,8 @@ Fetching data can be done in two different ways, either through a backend pollin
  
 ### Double Websocket Push
 - This approach relies on Sendou.ink providing webhooks for SendouQ updates, here the backend subscribes to these webhooks for the individual streamer.
-- The following details work the same as in the "Backend Polling + Websocket Push" method.
+- The frontend will maintain a WebSocket connection to the backend and listen for any changes for a specific streamer's SendouQ activity.
+- When Sendou.ink pushes a change to the backend, the backend will push the new data to the frontend for the specific twitch streamer's viewers to see.
 
 ## Design
 ### Frontend
