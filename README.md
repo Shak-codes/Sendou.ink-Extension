@@ -1,4 +1,4 @@
-# Sendou-Extension
+# Sendou.ink-Extension
 
 ## Purpose
 The Sendou.ink Twitch Extension is a service that provides viewers access to a streamer's real time SendouQ activity. If a streamer is currently playing SendouQ, viewers can easily find the match score, upcoming maps, and participating players. The goal is to provide viewers the privilege of not needing to leave the browser / app to find this information manually, and saves the need to ask for this information in chat. If the streamer is not actively playing SendouQ, their profile and ranking will be shown. In the future, we aim to support live tournament coverage on Sendou.ink(match score, upcoming maps, players, and round information) for participating streamers.
