@@ -1,0 +1,76 @@
+@import url("../public/fonts/fonts.css");
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #070337;
+  border: 1px solid red;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: #e0dede;
+}
+
+.navbar {
+  border: 1px solid white;
+}
+
+a {
+  font-family: "Core Sans", sans-serif;
+  font-weight: bold;
+  font-size: 20px;
+  color: #acabd2;
+  text-decoration: none;
+  padding: 4px;
+  transition: color 0.3s;
+}
+
+a:hover {
+  color: #e0dede;
+}
+
+a.active {
+  color: #e0dede;
+}
+
+.profile-container {
+  border: 1px solid white;
+  padding: 12px;
+  gap: 18px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.profile {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #352b62;
+}
+
+.name {
+  font-family: "Core Sans", sans-serif;
+  font-weight: bold;
+  font-size: 20px;
+  color: #e0dede;
+}
+
+.team-container {
+  display: flex;
+}
+
+.team {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+
+.team-description {
+  display: flex;
+  flex-direction: column;
+}

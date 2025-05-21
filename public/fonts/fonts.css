@@ -1,0 +1,17 @@
+@font-face {
+  font-family: "Core Sans";
+  src: url("core-sans.otf") format("opentype");
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: "Core Sans";
+  src: url("core-sans-bold.otf") format("opentype");
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: "Core Sans";
+  src: url("core-sans-extrabold.otf") format("opentype");
+  font-weight: bolder;
+}
