@@ -5,6 +5,7 @@ const app = express();
 
 app.use(express.static("video_component"));
 app.use("/images", express.static("public/images"));
+app.use("/fonts", express.static("public/fonts"));
 
 const options = {
   key: fs.readFileSync("certs/server.key"),

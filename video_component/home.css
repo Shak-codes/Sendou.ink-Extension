@@ -1,76 +1,130 @@
-@import url("../public/fonts/fonts.css");
+@import url("/fonts/fonts.css");
 
 body {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #070337;
-  border: 1px solid red;
+  background-color: #02011e;
+  gap: 10px;
 }
 
-h1,
-h2,
-h3,
-h4 {
-  color: #e0dede;
+header {
+  width: 100%;
+  max-width: 300px;
 }
 
-.navbar {
-  border: 1px solid white;
+ul {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  justify-content: space-around;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  gap: 10px;
+}
+
+.nav-list li {
+  flex: 1;
+  text-align: center;
+  padding: 0.25rem;
+  border-radius: 999px;
+  background-color: #352b62;
+}
+
+.nav-list li:last-child {
+  border-right: none;
 }
 
 a {
-  font-family: "Core Sans", sans-serif;
+  display: block;
+  font-family: "Lexend", sans-serif;
   font-weight: bold;
-  font-size: 20px;
+  font-size: 14px;
   color: #acabd2;
   text-decoration: none;
-  padding: 4px;
+  padding: 0.3rem;
+  border-radius: 999px;
   transition: color 0.3s;
 }
 
 a:hover {
   color: #e0dede;
+  cursor: pointer;
 }
 
 a.active {
   color: #e0dede;
 }
 
+main {
+  width: 100%;
+  max-width: 300px;
+}
+
 .profile-container {
-  border: 1px solid white;
   padding: 12px;
   gap: 18px;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
+  align-items: flex-start;
 }
 
 .profile {
-  width: 100px;
-  height: 100px;
+  flex: 1;
+  width: 10%;
+  height: 10%;
   border-radius: 50%;
   background-color: #352b62;
 }
 
+.details-container {
+  flex: 1;
+}
+
 .name {
-  font-family: "Core Sans", sans-serif;
+  font-family: "Lexend", sans-serif;
   font-weight: bold;
-  font-size: 20px;
+  font-size: 30px;
   color: #e0dede;
+  padding: 0;
+  margin: 0;
 }
 
 .team-container {
+  flex: 1;
   display: flex;
+  padding: 2px 1px 0px 1px;
+  gap: 10px;
 }
 
 .team {
-  width: 20px;
-  height: 20px;
+  width: 30%;
+  height: 30%;
   border-radius: 50%;
 }
 
 .team-description {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+}
+
+.team-name {
+  font-family: "Lexend", sans-serif;
+  font-weight: bold;
+  font-size: 16px;
+  color: #e0dede;
+  padding: 0;
+  margin: 0;
+}
+
+.team-role {
+  font-family: "Lexend", sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+  color: #acabd2;
+  padding: 0;
+  margin: 0;
 }

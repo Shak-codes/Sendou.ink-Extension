@@ -1,17 +1,23 @@
 @font-face {
-  font-family: "Core Sans";
-  src: url("core-sans.otf") format("opentype");
-  font-weight: normal;
+  font-family: "Lexend";
+  src: url("Lexend-Regular.ttf") format("truetype");
+  font-weight: 400;
 }
 
 @font-face {
-  font-family: "Core Sans";
-  src: url("core-sans-bold.otf") format("opentype");
+  font-family: "Lexend";
+  src: url("Lexend-SemiBold.ttf") format("truetype");
+  font-weight: 500
+}
+
+@font-face {
+  font-family: "Lexend";
+  src: url("Lexend-Bold.ttf") format("truetype");
   font-weight: bold;
 }
 
 @font-face {
-  font-family: "Core Sans";
-  src: url("core-sans-extrabold.otf") format("opentype");
+  font-family: "Lexend";
+  src: url("Lexend-ExtraBold.ttf") format("truetype");
   font-weight: bolder;
 }
