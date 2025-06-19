@@ -10,7 +10,21 @@ The extension will be comprised of three main services, a frontend, backend, and
 The frontend will house an iframe overlay on a participating stream. It requests the participating channel's broadcaster ID and uses it in conjunction with the backend service to serve the viewers the corresponding information.
 
 ### Backend service
-The backend service is a custom AWS Lambda server that will handle authentication and polling / subscribing to SendouQ match updates, pushing the data to the extension.
+The backend service is a custom AWS Lambda server that will handle authentication, that is a mapping from `TwitchId` -> `SInkId`. The endpoints will be as follows:
+- `/signup` where the `body` contains `TwitchId` and `SInkId`. The request then calls upon the Sendou.ink API to get the user's Sendou.ink data and stores:
+  - Sendou.ink name
+  - Sendou.ink ID
+  - Sendou.ink url
+  - Twitch name
+  - Twitch ID
+  - Last Live
+  - Team name(Optional)
+  - Team url(Optional)
+  - Team role(Optional)
+  - SendouQ Rank(Optional)
+- `/user/{twitchId}` which returns the above information
+- `/users` which will return an array of Twitch usernames
+- `/delete/{twitchId}` which will delete a user from the database if inactive for long enough
 
 ### Sendou.ink API
 The Sendou.ink API is the service that will be queried in order to obtain all information regarding a streamer's SendouQ activity. 
