@@ -2,7 +2,7 @@ import { pool } from "../db";
 import { TwitchData, User } from "../types";
 import { SINK_ROUTE, SINK_TOKEN } from "./constants";
 
-export const getUser = async (twitchID: string): Promise<User | null> => {
+export const getUser = async (twitch_id: string): Promise<User | null> => {
   try {
     const result = await pool.query<User>(
       `
@@ -11,7 +11,7 @@ export const getUser = async (twitchID: string): Promise<User | null> => {
       WHERE twitch_id = $1 
       RETURNING *
     `,
-      [twitchID]
+      [twitch_id]
     );
 
     return result.rows[0] || null;
@@ -82,14 +82,14 @@ export const deleteInactiveUsers = async () => {
   return result.rowCount;
 };
 
-export const getIDs = async (): Promise<
-  { twitchID: string; sendouID: string }[]
+export const get_twitch_names = async (): Promise<
+  { twitch_name: string }[]
 > => {
   try {
-    const result = await pool.query("SELECT twitchID, sendouID FROM users");
+    const result = await pool.query("SELECT twitch_id FROM users");
     return result.rows;
   } catch (error) {
-    console.error("Error fetching user IDs:", error);
+    console.error("Error fetching Twitch names:", error);
     throw error;
   }
 };

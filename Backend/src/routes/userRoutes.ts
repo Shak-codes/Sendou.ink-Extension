@@ -1,16 +1,16 @@
 import express, { Request, Response, Router } from "express";
-import { getUser, getIDs, addUser } from "../services/userService";
+import { getUser, get_twitch_names, addUser } from "../services/userService";
 import { userRequestLimiter } from "../middleware/rateLimiter";
 
 const router: Router = express.Router();
 
 router.get(
-  "/:twitchID",
-  async (req: Request<{ twitchID: string }>, res: Response): Promise<void> => {
-    const { twitchID } = req.params;
+  "/user/:twitch_id",
+  async (req: Request<{ twitch_id: string }>, res: Response): Promise<void> => {
+    const { twitch_id } = req.params;
 
     try {
-      const user = await getUser(twitchID);
+      const user = await getUser(twitch_id);
       if (!user) {
         res.status(404).json({ error: "User not found" });
         return;
@@ -18,18 +18,18 @@ router.get(
 
       res.status(200).json(user);
     } catch (err) {
-      console.error("Error in GET /user/:twitchID", err);
+      console.error("Error in GET /user/:twitch_id", err);
       res.status(500).json({ error: "Internal server error" });
     }
   }
 );
 
-router.get("/ids", async (_req, res) => {
+router.get("/twitch-names", async (_req, res) => {
   try {
-    const userIDs = await getIDs();
-    res.status(200).json(userIDs);
+    const names = await get_twitch_names();
+    res.status(200).json(names);
   } catch (error) {
-    console.error("Error in GET /api/users/ids:", error);
+    console.error("Error in GET /api/users/twitch-names:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
