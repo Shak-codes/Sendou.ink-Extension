@@ -86,8 +86,8 @@ export const get_twitch_names = async (): Promise<
   { twitch_name: string }[]
 > => {
   try {
-    const result = await pool.query("SELECT twitch_id FROM users");
-    return result.rows;
+    const result = await pool.query("SELECT twitch_name FROM users");
+    return result.rows.map((row) => row.twitch_name);
   } catch (error) {
     console.error("Error fetching Twitch names:", error);
     throw error;
