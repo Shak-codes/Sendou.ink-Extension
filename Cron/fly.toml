@@ -1,0 +1,19 @@
+# fly.toml app configuration file generated for sendou-ink-ext-cron on 2025-06-21T11:27:08-04:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'sendou-ink-ext-cron'
+primary_region = 'yyz'
+
+[build]
+
+[processes]
+  cronjob = 'node main.js'
+  
+[[schedule]]
+  process = "cronjob"  # Must match a process name above
+  cron = "*/5 * * * *"  # Runs every 5 minutes
+
+[[vm]]
+  size = 'shared-cpu-1x'
