@@ -21,9 +21,8 @@ export const getUser = async (twitch_id: string): Promise<User | null> => {
   }
 };
 
-// DO NOT PUSH TILL CONFIGURING ENV FOR AUTH TOKEN
-const fetchUserData = async (id: string): Promise<any> => {
-  const url = `${SINK_ROUTE}/user/${id}`;
+export const fetchUserData = async (discord_id: string): Promise<any> => {
+  const url = `${SINK_ROUTE}/user/${discord_id}`;
 
   const response = await fetch(url, {
     method: "GET",
@@ -82,14 +81,14 @@ export const deleteInactiveUsers = async () => {
   return result.rowCount;
 };
 
-export const get_twitch_names = async (): Promise<
-  { twitch_name: string }[]
+export const get_identifiers = async (): Promise<
+  { twitch_name: string; sendou_id: number }[]
 > => {
   try {
-    const result = await pool.query("SELECT twitch_name FROM users");
-    return result.rows.map((row) => row.twitch_name);
+    const result = await pool.query("SELECT twitch_name, sendou_id FROM users");
+    return result.rows;
   } catch (error) {
-    console.error("Error fetching Twitch names:", error);
+    console.error("Error fetching identifiers:", error);
     throw error;
   }
 };
