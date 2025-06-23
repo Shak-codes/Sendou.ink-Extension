@@ -1,0 +1,102 @@
+@use "../../styles/colors.scss";
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  font-family: "Lexend", "sans-serif";
+  font-weight: 400;
+  height: 3rem;
+  width: 100%;
+  border: 2px solid var(--button-bg);
+  border-radius: 5px;
+  z-index: 1;
+  margin: 0;
+  transition: color 0.3s ease-in-out, border 0.3s ease-in-out,
+    background-color 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+
+  .buttonContent {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    transition: transform 0.4s ease;
+  }
+
+  &.loading .buttonContent,
+  &.success .buttonContent {
+    transform: translateX(-12px);
+  }
+
+  &.loading {
+    cursor: not-allowed;
+  }
+
+  &:not(:disabled):hover {
+    border: 2px solid var(--button-active-bg);
+    background-color: var(--button-active-bg);
+    color: var(--button-active-text);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+.loader {
+  width: 20px;
+  height: 20px;
+  border: 3.5px solid transparent;
+  border-top: 3.5px solid #fff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite, fade-in-out 0.7s ease-in-out;
+  position: relative;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.checkmark {
+  position: relative;
+  font-size: 18px;
+  font-weight: bolder;
+  color: #fff;
+  animation: fade-in-out 0.7s ease-in-out;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.button.loading .loader {
+  opacity: 1;
+  visibility: visible;
+}
+
+.button.success .checkmark {
+  opacity: 1;
+  visibility: visible;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fade-in-out {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
