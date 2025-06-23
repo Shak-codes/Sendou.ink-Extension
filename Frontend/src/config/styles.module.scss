@@ -1,0 +1,38 @@
+@use "../styles/colors.scss";
+@use "../styles//fonts.scss";
+
+.container {
+  background-color: var(--background);
+  padding: 2%;
+}
+
+h2,
+p,
+label {
+  color: var(--text);
+  margin: 0;
+  padding: 0;
+}
+
+h2 {
+  font-family: "Lexend", "sans-serif";
+  font-weight: bold;
+}
+
+p {
+  font-family: "Lexend", sans-serif;
+  font-weight: 300;
+}
+
+.label {
+  font-size: 10px;
+  font-family: "Lexend", sans-serif;
+  font-weight: 300;
+}
+
+.bottomContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
