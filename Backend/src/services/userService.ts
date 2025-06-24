@@ -29,13 +29,14 @@ export const addUser = async (data: User): Promise<User> => {
     sendou_name,
     sendou_url,
     avatar_url,
+    peak_rank,
   } = data;
 
   try {
     const result = await pool.query<User>(
       `
       INSERT INTO users 
-        (discord_id, twitch_id, sendou_id, twitch_name, sendou_name, sendou_url, avatar_url)
+        (discord_id, twitch_id, sendou_id, twitch_name, sendou_name, sendou_url, avatar_url, peak_rank)
       VALUES ($1, $2, $3, $4, $5, $6, $7)
       ON CONFLICT (twitch_id) DO UPDATE SET
         discord_id = EXCLUDED.discord_id,
@@ -43,7 +44,8 @@ export const addUser = async (data: User): Promise<User> => {
         twitch_name = EXCLUDED.twitch_name,
         sendou_name = EXCLUDED.sendou_name,
         sendou_url = EXCLUDED.sendou_url,
-        avatar_url = EXCLUDED.avatar_url
+        avatar_url = EXCLUDED.avatar_url,
+        peak_rank = EXCLUDED.peak_rank,
       RETURNING *;
       `,
       [
@@ -54,6 +56,7 @@ export const addUser = async (data: User): Promise<User> => {
         sendou_name,
         sendou_url,
         avatar_url,
+        peak_rank,
       ]
     );
 
