@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from "./styles.module.scss";
 
-function Input({
+const Input = ({
   id,
   value,
   onFocus,
@@ -10,7 +10,7 @@ function Input({
   help,
   error,
   type = "text",
-}) {
+}) => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -19,7 +19,9 @@ function Input({
         <input
           type={type === "password" && !showPassword ? "password" : "text"}
           id={id}
-          className={`${styles.roundedInput} ${value ? styles.active : ""}`}
+          className={`${styles.roundedInput} ${value ? styles.active : ""} ${
+            error.display ? styles.errorInput : ""
+          }`}
           value={value}
           onFocus={onFocus}
           onChange={onChange}
@@ -31,10 +33,10 @@ function Input({
           {label}
         </label>
       </div>
-      {error && <span className={styles.error}>{error}</span>}
+      {error.display && <span className={styles.error}>{error.message}</span>}
       {help && <span className={styles.help}>{help}</span>}
     </div>
   );
-}
+};
 
 export default Input;

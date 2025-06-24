@@ -2,6 +2,8 @@
 @use "../../styles/fonts.scss";
 
 .container {
+  display: flex;
+  flex-direction: column;
   margin-top: 2%;
   margin-bottom: 2%;
 }
@@ -24,7 +26,7 @@
   outline: none;
   font-size: 16px;
   transition: border-color 0.5s ease-in-out;
-  margin: 0;
+  margin-bottom: 0.5%;
 }
 
 .roundedInput:focus:not(.active) {
@@ -62,6 +64,18 @@
   color: var(--highlight);
 }
 
+.errorInput {
+  border-color: red !important;
+}
+
+.error {
+  font-family: "Lexend", "sans-serif";
+  font-weight: 300;
+  font-size: small;
+  color: red;
+  margin-bottom: 0.5%;
+}
+
 .help,
 .link {
   margin: 0;
@@ -70,11 +84,4 @@
   font-weight: 300;
   font-size: 12px;
   color: #fff;
-}
-
-.error {
-  font-family: "Lexend", "sans-serif";
-  font-weight: 300;
-  font-size: medium;
-  color: red;
 }

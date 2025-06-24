@@ -1,122 +1,133 @@
 import React, { useState, useEffect } from "react";
-import { URLS } from "../../public/constants";
 import styles from "./styles.module.scss";
-import Input from "../components/Input/Input";
-import Button from "../components/Button/Button";
+import { GET_PROFILE_DATA, GET_TWITCH_NAME } from "./constants";
+import { LinkProfile, VerifyProfile, DisplayProfile } from "./screens";
 
-function Config() {
+const Config = () => {
   const [discordId, setDiscordId] = useState("");
-  const [status, setStatus] = useState("");
   const [ext, setExt] = useState(null);
-  const [error, setError] = useState("");
+  const [error, setError] = useState({
+    message: null,
+    display: false,
+  });
   const [configData, setConfigData] = useState(null);
+  const [verifyData, setVerifyData] = useState(false);
 
   useEffect(() => {
     const twitchExt = window.Twitch?.ext;
 
     if (!twitchExt) {
-      setStatus("Twitch extension helper not found.");
       return;
     }
 
-    setExt(twitchExt);
-
     twitchExt.onAuthorized((auth) => {
-      twitchExt.authToken = auth.token;
       twitchExt.channelId = auth.channelId;
+      console.log(`Channel ID: ${auth.channelId}`);
 
       // Load saved config from Twitch Config Service
       twitchExt.configuration.broadcaster.get().then((cfg) => {
         try {
           const data = JSON.parse(cfg.content || "{}");
-          if (data.discordId) setDiscordId(data.discordId);
+          setConfigData(data);
         } catch (err) {
           console.error("Failed to parse config", err);
         }
       });
     });
+
+    setExt(twitchExt);
   }, []);
 
-  const linkAccount = async () => {
-    const response = await fetch(`TEST`);
-    console.log(`response.ok ${response.ok}`);
-    if (response.ok) setConfigData(response.json);
-    else if (response.status == 404) setError("Invalid User ID");
-    else setError("Something went wrong, please try again later");
+  const initiateLink = async () => {
+    try {
+      const [twitchResponse, profileResponse] = await Promise.all([
+        fetch(`${GET_TWITCH_NAME}/${ext.channelId}`),
+        fetch(`${GET_PROFILE_DATA}/${discordId}`),
+      ]);
+
+      if (profileResponse.status === 404) {
+        setError((prev) => ({ ...prev, message: "Invalid User ID" }));
+        return;
+      } else if (profileResponse.status >= 500) {
+        setError((prev) => ({
+          ...prev,
+          message: "Something went wrong, please try again later",
+        }));
+        return;
+      }
+
+      const [twitchName, profileData] = await Promise.all([
+        twitchResponse.json(),
+        profileResponse.json(),
+      ]);
+
+      return {
+        discord_id: discordId,
+        sendou_id: profileData.id,
+        twitch_id: ext.channelId,
+        twitch_name: twitchName,
+        sendou_name: profileData.name,
+        sendou_url: profileData.url,
+        avatar_url: profileData.avatarUrl,
+      };
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+      setError((prev) => ({
+        ...prev,
+        message: "An unexpected error occurred",
+      }));
+    }
   };
 
-  const saveConfig = async () => {
-    if (!ext) {
-      setStatus("Twitch extension not initialized");
-      return;
-    }
+  const updateConfig = async (data) => {
+    setConfigData(data);
+    setVerifyData(true);
+  };
 
-    setStatus("Validating...");
+  const saveConfig = async (config) => {
+    await ext.configuration.broadcaster.set(JSON.stringify(config));
+  };
 
-    try {
-      const res = await fetch(`https://api.sendou.ink/discord/${discordId}`);
-      if (!res.ok) {
-        setStatus("Invalid Discord ID");
-        return;
-      }
-      const userData = await res.json();
+  const onError = async () => {
+    setError((prev) => ({
+      ...prev,
+      display: true,
+    }));
+  };
 
-      await ext.configuration.broadcaster.set(
-        ext.authToken,
-        JSON.stringify({ discordId })
-      );
+  const resetConfig = () => {
+    setConfigData(null);
+    setDiscordId("");
+    setVerifyData(false);
+    console.log("Reset values!");
+  };
 
-      const saveRes = await fetch("/api/link", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${ext.authToken}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          broadcasterId: ext.channelId,
-          discordId,
-          sendouId: userData.sendouId,
-        }),
-      });
-
-      if (!saveRes.ok) {
-        setStatus("Failed to save config on backend");
-        return;
-      }
-
-      setStatus("Saved! ✅");
-    } catch (error) {
-      setStatus("Error during save: " + error.message);
-    }
+  const handleIdChange = (e) => {
+    setDiscordId(e.target.value);
   };
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.text}>Welcome!</h2>
-      <p className={styles.text}>
-        To set up this extension, please provide the 'User ID' of the Discord
-        account linked to your Sendou.ink account.
-      </p>
-      <Input
-        id="userid"
-        value={discordId}
-        onChange={(e) => setDiscordId(e.target.value)}
-        label="User ID"
-        help={
-          <>
-            Can't find your User ID? Read this{" "}
-            <a className={styles.link} href={URLS.USER_ID} target="_blank">
-              article
-            </a>
-          </>
-        }
-        error={error}
-      />
-      <div className={styles.bottomContainer}>
-        <Button text="Submit" onClick={linkAccount} disabled={!discordId} />
-      </div>
+      {!configData && !verifyData && (
+        <LinkProfile
+          discordId={discordId}
+          onChange={handleIdChange}
+          error={error}
+          onError={onError}
+          initiateLink={initiateLink}
+          onSuccess={updateConfig}
+        />
+      )}
+      {!!configData && verifyData && (
+        <VerifyProfile
+          resetConfig={resetConfig}
+          configData={configData}
+          saveConfig={saveConfig}
+        />
+      )}
+      {!!configData && !verifyData && <DisplayProfile />}
     </div>
   );
-}
+};
 
 export default Config;

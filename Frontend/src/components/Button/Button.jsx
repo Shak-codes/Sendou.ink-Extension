@@ -1,34 +1,79 @@
 import React, { useState } from "react";
 import styles from "./styles.module.scss";
 
-function Button({ text, onClick, animated, disabled = false }) {
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
+function Button({
+  text,
+  onClick,
+  onError = null,
+  onSuccess = null,
+  animated,
+  disabled = false,
+}) {
+  const [state, setState] = useState("idle"); // 'idle' | 'loading' | 'loadingFade' | 'success' | 'failure'
 
   const handleClick = async () => {
-    if (onClick && animated) {
-      setLoading(true);
-      await onClick();
-      setLoading(false);
-      setSuccess(true);
-    } else if (onClick) {
-      await onClick();
+    if (!onClick) return;
+
+    if (!animated) {
+      const result = await onClick();
+      if (result === undefined || result === null) {
+        await onError();
+        return;
+      }
+      if (onSuccess) await onSuccess(result);
+      return;
+    }
+
+    setState("loading");
+    const result = await onClick();
+
+    setState("loadingFade");
+    await new Promise((r) => setTimeout(r, 750));
+
+    if (result === undefined || result === null) {
+      setState("failure");
+      await onError();
+      await new Promise((r) => setTimeout(r, 1500));
+      setState("idle");
+      return;
+    }
+
+    setState("success");
+    await new Promise((r) => setTimeout(r, 1500));
+
+    setState("idle");
+    await onSuccess(result);
+  };
+
+  const ButtonClasses = (state) => {
+    const baseClass = styles.button;
+
+    switch (state) {
+      case "loading":
+        return `${baseClass} ${styles.loading}`;
+      case "loadingFade":
+        return `${baseClass} ${styles.loading} ${styles.fadeOut}`;
+      case "success":
+        return `${baseClass} ${styles.success}`;
+      case "failure":
+        return `${baseClass} ${styles.failure}`;
+      default:
+        return baseClass;
     }
   };
 
-  const classNames = [
-    styles.button,
-    loading && styles.loading,
-    success && styles.success,
-  ]
-    .filter(Boolean)
-    .join(" ");
-
   return (
-    <button onClick={handleClick} className={classNames} disabled={disabled}>
+    <button
+      onClick={handleClick}
+      className={ButtonClasses(state)}
+      disabled={disabled}
+    >
       <div className={styles.buttonContent}>{text}</div>
-      {loading && <div className={styles.loader}></div>}
-      {success && <div className={styles.checkmark}>✓</div>}
+      {(state == "loading" || state === "loadingFade") && (
+        <div className={styles.loadingIcon}></div>
+      )}
+      {state == "success" && <div className={styles.checkmark}>✓</div>}
+      {state == "failure" && <div className={styles.cross}>X</div>}
     </button>
   );
 }

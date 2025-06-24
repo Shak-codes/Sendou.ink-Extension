@@ -1,0 +1,20 @@
+.text {
+  color: var(--text);
+  margin: 0;
+  padding: 0;
+}
+
+h2 {
+  font-family: "Lexend", "sans-serif";
+  font-weight: bold;
+}
+
+p {
+  font-family: "Lexend", sans-serif;
+  font-weight: 300;
+}
+
+.buttonContainer {
+  display: flex;
+  gap: 20px;
+}

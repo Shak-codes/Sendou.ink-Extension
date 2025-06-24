@@ -24,16 +24,22 @@
     display: flex;
     align-items: center;
     gap: 18px;
-    transition: transform 0.4s ease;
+    transition: transform 0.5s ease;
   }
 
   &.loading .buttonContent,
-  &.success .buttonContent {
+  &.success .buttonContent,
+  &.failure .buttonContent {
     transform: translateX(-12px);
   }
 
-  &.loading {
+  &.loading,
+  &.loadingFade,
+  &.success,
+  &.failure,
+  &:disabled {
     cursor: not-allowed;
+    pointer-events: none;
   }
 
   &:not(:disabled):hover {
@@ -44,41 +50,59 @@
 
   &:disabled {
     opacity: 0.5;
-    cursor: not-allowed;
-    pointer-events: none;
   }
 }
 
-.loader {
+.loadingIcon {
   width: 20px;
   height: 20px;
   border: 3.5px solid transparent;
-  border-top: 3.5px solid #fff;
+  border-top: 3.5px solid var(--highlight);
   border-radius: 50%;
-  animation: spin 0.6s linear infinite, fade-in-out 0.7s ease-in-out;
+  animation: spin 0.6s linear infinite, fade-in-out 0.5s ease-in-out;
   position: relative;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.5s ease-in-out;
+
+  &.fadeOut {
+    opacity: 0;
+  }
 }
 
 .checkmark {
   position: relative;
   font-size: 18px;
   font-weight: bolder;
-  color: #fff;
+  color: var(--highlight);
   animation: fade-in-out 0.7s ease-in-out;
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease-in-out;
 }
 
-.button.loading .loader {
+.cross {
+  position: relative;
+  font-size: 18px;
+  font-weight: bolder;
+  color: var(--error);
+  animation: fade-in-out 0.7s ease-in-out;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.button.loading .loadingIcon {
   opacity: 1;
   visibility: visible;
 }
 
 .button.success .checkmark {
+  opacity: 1;
+  visibility: visible;
+}
+
+.button.failure .cross {
   opacity: 1;
   visibility: visible;
 }
