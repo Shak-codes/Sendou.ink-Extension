@@ -15,8 +15,35 @@ export interface User {
   sendouq_rank?: string | null;
 }
 
-export interface TwitchData {
-  discord_id: string;
-  twitch_name: string;
-  twitch_id: string;
+interface Socials {
+  twitch: string | null;
+  battlefy: string | null;
+  bsky: string | null;
+  twitter: string | null;
+}
+
+interface Weapon {
+  id: string;
+  name: string;
+  isFiveStar: boolean;
+}
+
+interface Badge {
+  name: string;
+  count: number;
+  gifUrl: string;
+  imageUrl: string;
+}
+
+export interface SendouData {
+  id: string;
+  name: string;
+  discordId: string;
+  avatarUrl: string;
+  country: string;
+  plusServerTier: string | null;
+  socials: Socials;
+  peakXp: string | null;
+  weaponPool: Weapon[];
+  badges: Badge[];
 }

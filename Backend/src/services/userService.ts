@@ -1,6 +1,5 @@
 import { pool } from "../db";
-import { TwitchData, User } from "../types";
-import { SINK_ROUTE, SINK_TOKEN } from "./constants";
+import { User } from "../types";
 
 export const getUser = async (twitch_id: string): Promise<User | null> => {
   try {
@@ -19,29 +18,6 @@ export const getUser = async (twitch_id: string): Promise<User | null> => {
     console.error("Error getting user:", error);
     throw error;
   }
-};
-
-export const fetchUserData = async (discord_id: string): Promise<any> => {
-  const url = `${SINK_ROUTE}/user/${discord_id}`;
-
-  const response = await fetch(url, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${SINK_TOKEN}`,
-    },
-  });
-
-  if (!response.ok) {
-    const error = new Error(
-      `Failed to fetch user data: ${response.statusText}`
-    );
-    // @ts-ignore - attach status code for easier handling
-    error.status = response.status;
-    throw error;
-  }
-
-  const data = await response.json();
-  return data;
 };
 
 export const addUser = async (data: User): Promise<User> => {

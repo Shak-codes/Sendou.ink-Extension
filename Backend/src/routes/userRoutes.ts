@@ -1,10 +1,5 @@
 import express, { Request, Response, Router } from "express";
-import {
-  getUser,
-  get_identifiers,
-  addUser,
-  fetchUserData,
-} from "../services/userService";
+import { getUser, get_identifiers, addUser } from "../services/userService";
 import { userRequestLimiter } from "../middleware/rateLimiter";
 
 const router: Router = express.Router();
@@ -18,25 +13,6 @@ router.get("/identifiers", async (_req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
-
-router.get(
-  "/sendou-profile/:discord_id",
-  userRequestLimiter,
-  async (req, res) => {
-    const { discord_id } = req.params;
-    try {
-      const data = await fetchUserData(discord_id);
-      res.status(200).json(data);
-    } catch (err: any) {
-      if (err.status === 404) {
-        res.status(404).json({ error: "User not found" });
-      }
-
-      console.error("Error fetching user data:", err);
-      res.status(500).json({ error: "Internal server error" });
-    }
-  }
-);
 
 router.post("/signup", userRequestLimiter, async (req, res) => {
   try {
