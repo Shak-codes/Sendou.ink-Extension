@@ -27,8 +27,13 @@ router.get(
     try {
       const data = await fetchUserData(discord_id);
       res.status(200).json(data);
-    } catch (err) {
-      res.status(500).json({ error: "Failed to find user" });
+    } catch (err: any) {
+      if (err.status === 404) {
+        res.status(404).json({ error: "User not found" });
+      }
+
+      console.error("Error fetching user data:", err);
+      res.status(500).json({ error: "Internal server error" });
     }
   }
 );

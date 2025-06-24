@@ -32,38 +32,53 @@ export const fetchUserData = async (discord_id: string): Promise<any> => {
   });
 
   if (!response.ok) {
-    throw new Error(`Failed to fetch user data: ${response.statusText}`);
+    const error = new Error(
+      `Failed to fetch user data: ${response.statusText}`
+    );
+    // @ts-ignore - attach status code for easier handling
+    error.status = response.status;
+    throw error;
   }
 
   const data = await response.json();
   return data;
 };
 
-export const addUser = async (data: TwitchData): Promise<any> => {
-  const { discord_id, twitch_name, twitch_id } = data;
+export const addUser = async (data: User): Promise<User> => {
+  const {
+    discord_id,
+    twitch_id,
+    sendou_id,
+    twitch_name,
+    sendou_name,
+    sendou_url,
+    avatar_url,
+  } = data;
 
   try {
-    const {
-      name,
-      url,
-      avatarUrl,
-      peakXp,
-      id: sendou_id,
-    } = await fetchUserData(discord_id);
-
     const result = await pool.query<User>(
       `
       INSERT INTO users 
-        (sendou_name, sendou_id, url, avatar_url, twitch_name, twitch_id) 
-      VALUES ($1, $2, $3, $4, $5, $6)
+        (discord_id, twitch_id, sendou_id, twitch_name, sendou_name, sendou_url, avatar_url)
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
       ON CONFLICT (twitch_id) DO UPDATE SET
+        discord_id = EXCLUDED.discord_id,
+        sendou_id = EXCLUDED.sendou_id,
+        twitch_name = EXCLUDED.twitch_name,
         sendou_name = EXCLUDED.sendou_name,
-        url = EXCLUDED.url,
-        avatar_url = EXCLUDED.avatar_url,
-        rank = EXCLUDED.rank
-      RETURNING *
-    `,
-      [name, sendou_id, url, avatarUrl, twitch_name, twitch_id]
+        sendou_url = EXCLUDED.sendou_url,
+        avatar_url = EXCLUDED.avatar_url
+      RETURNING *;
+      `,
+      [
+        discord_id,
+        twitch_id,
+        sendou_id,
+        twitch_name,
+        sendou_name,
+        sendou_url,
+        avatar_url,
+      ]
     );
 
     return result.rows[0];
@@ -85,7 +100,9 @@ export const get_identifiers = async (): Promise<
   { twitch_name: string; sendou_id: number }[]
 > => {
   try {
-    const result = await pool.query("SELECT twitch_name, sendou_id FROM users");
+    const result = await pool.query(
+      "SELECT discord_id, twitch_id, sendou_id, twitch_name, sendou_name FROM users"
+    );
     return result.rows;
   } catch (error) {
     console.error("Error fetching identifiers:", error);

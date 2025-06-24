@@ -1,16 +1,18 @@
 export interface User {
   id: number;
-  sendou_name: string;
+  discord_id: string;
   sendou_id: string;
-  url: string;
-  avatar_url: string;
-  twitch_name: string;
   twitch_id: string;
+  sendou_name: string;
+  twitch_name: string;
+  sendou_url: string;
+  avatar_url: string;
   last_fetched: Date;
   team?: string | null;
   team_url?: string | null;
   team_role?: string | null;
-  rank?: string | null;
+  peak_rank?: string | null;
+  sendouq_rank?: string | null;
 }
 
 export interface TwitchData {
