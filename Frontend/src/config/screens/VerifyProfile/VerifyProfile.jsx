@@ -2,7 +2,14 @@ import Button from "../../../components/Button/Button";
 import styles from "./styles.module.scss";
 import Profile from "../../../components/Profile/Profile";
 
-const VerifyProfile = ({ resetConfig, configData, saveConfig }) => {
+const VerifyProfile = ({
+  resetConfig,
+  configData,
+  saveConfig,
+  error,
+  onError,
+  onSuccess,
+}) => {
   return (
     <section className={styles.container}>
       <header>
@@ -12,7 +19,13 @@ const VerifyProfile = ({ resetConfig, configData, saveConfig }) => {
       <Profile userData={configData} />
       <div className={styles.buttonContainer}>
         <Button text="Go back" onClick={resetConfig} />
-        <Button text="Looks good!" onClick={saveConfig} />
+        <Button
+          animated
+          text="Looks good!"
+          onClick={saveConfig}
+          onError={onError}
+          onSuccess={onSuccess}
+        />
       </div>
     </section>
   );

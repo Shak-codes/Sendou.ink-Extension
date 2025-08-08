@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import styles from "./styles.module.scss";
-import { GET_PROFILE_DATA, GET_TWITCH_NAME } from "./constants";
+import {
+  GET_PROFILE_DATA,
+  GET_TWITCH_NAME,
+  ADD_USER,
+  GET_USER,
+} from "./constants";
 import { LinkProfile, VerifyProfile, DisplayProfile } from "./screens";
 
 const Config = () => {
@@ -21,31 +26,23 @@ const Config = () => {
       return;
     }
 
-    twitchExt.onAuthorized((auth) => {
+    twitchExt.onAuthorized(async (auth) => {
       twitchExt.channelId = auth.channelId;
       console.log(`Channel ID: ${auth.channelId}`);
 
-      // Load saved config from Twitch Config Service
-      twitchExt.configuration.broadcaster.get("config").then((cfg) => {
-        try {
-          const data = JSON.parse(cfg.content || "{}");
-          setConfigData(data);
-        } catch (err) {
-          console.error("Failed to parse config", err);
-        }
-      });
+      try {
+        const response = await fetch(`${GET_USER}/${auth.channelId}`);
+        const userData = await response.json();
+        console.log("Fetched user data:", userData);
+        setConfigData(userData);
+        setDisplayProfile(true);
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
+      }
     });
 
     setExt(twitchExt);
   }, []);
-
-  useEffect(() => {
-    console.log("Ext!");
-    console.log(ext);
-    if (ext) {
-      console.log(ext.configuration);
-    }
-  }, [ext]);
 
   const initiateLink = async () => {
     try {
@@ -72,12 +69,13 @@ const Config = () => {
 
       return {
         discord_id: discordId,
-        sendou_id: profileData.id,
         twitch_id: ext.channelId,
+        sendou_id: profileData.id,
         twitch_name: twitchName,
         sendou_name: profileData.name,
         sendou_url: profileData.url,
         avatar_url: profileData.avatarUrl,
+        peak_rank: null,
       };
     } catch (error) {
       console.error("Failed to fetch data:", error);
@@ -93,19 +91,29 @@ const Config = () => {
     setVerifyData(true);
   };
 
-  const saveConfig = async (config) => {
-    if (ext?.configuration?.set) {
-      console.log("Checking config");
-      console.log(configData);
-      await ext.configuration.set(
-        "broadcaster",
-        "1",
-        JSON.stringify(configData)
-      );
-      setVerifyData(false);
-      setDisplayProfile(true);
-    } else {
-      console.warn("ext.configuration.broadcaster.set is not available");
+  const saveConfig = async () => {
+    try {
+      const response = await fetch(ADD_USER, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(configData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to save user config: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log("User saved:", result);
+      return result;
+    } catch (err) {
+      console.error("Save config failed:", err);
+      setError({
+        message: "Failed to save user data. Please try again later.",
+        display: true,
+      });
     }
   };
 
@@ -127,6 +135,12 @@ const Config = () => {
     setDiscordId(e.target.value);
   };
 
+  const verifySuccess = () => {
+    setDisplayProfile(true);
+    setVerifyData(false);
+    console.log("Verified Success!");
+  };
+
   return (
     <div className={styles.container}>
       {!configData && !verifyData && (
@@ -144,6 +158,9 @@ const Config = () => {
           resetConfig={resetConfig}
           configData={configData}
           saveConfig={saveConfig}
+          error={error}
+          onError={onError}
+          onSuccess={verifySuccess}
         />
       )}
       {!!configData && !verifyData && displayProfile && (
