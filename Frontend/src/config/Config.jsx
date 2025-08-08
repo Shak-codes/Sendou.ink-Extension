@@ -12,6 +12,7 @@ const Config = () => {
   });
   const [configData, setConfigData] = useState(null);
   const [verifyData, setVerifyData] = useState(false);
+  const [displayProfile, setDisplayProfile] = useState(false);
 
   useEffect(() => {
     const twitchExt = window.Twitch?.ext;
@@ -25,7 +26,7 @@ const Config = () => {
       console.log(`Channel ID: ${auth.channelId}`);
 
       // Load saved config from Twitch Config Service
-      twitchExt.configuration.broadcaster.get().then((cfg) => {
+      twitchExt.configuration.broadcaster.get("config").then((cfg) => {
         try {
           const data = JSON.parse(cfg.content || "{}");
           setConfigData(data);
@@ -37,6 +38,14 @@ const Config = () => {
 
     setExt(twitchExt);
   }, []);
+
+  useEffect(() => {
+    console.log("Ext!");
+    console.log(ext);
+    if (ext) {
+      console.log(ext.configuration);
+    }
+  }, [ext]);
 
   const initiateLink = async () => {
     try {
@@ -85,7 +94,19 @@ const Config = () => {
   };
 
   const saveConfig = async (config) => {
-    await ext.configuration.broadcaster.set(JSON.stringify(config));
+    if (ext?.configuration?.set) {
+      console.log("Checking config");
+      console.log(configData);
+      await ext.configuration.set(
+        "broadcaster",
+        "1",
+        JSON.stringify(configData)
+      );
+      setVerifyData(false);
+      setDisplayProfile(true);
+    } else {
+      console.warn("ext.configuration.broadcaster.set is not available");
+    }
   };
 
   const onError = async () => {
@@ -125,7 +146,9 @@ const Config = () => {
           saveConfig={saveConfig}
         />
       )}
-      {!!configData && !verifyData && <DisplayProfile />}
+      {!!configData && !verifyData && displayProfile && (
+        <DisplayProfile data={configData} resetConfig={resetConfig} />
+      )}
     </div>
   );
 };
