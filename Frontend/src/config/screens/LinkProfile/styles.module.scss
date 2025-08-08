@@ -1,3 +1,9 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 .text {
   color: var(--text);
   margin: 0;
@@ -9,7 +15,7 @@ h2 {
   font-weight: bold;
 }
 
-p {
+h3 {
   font-family: "Lexend", sans-serif;
   font-weight: 300;
 }
@@ -28,11 +34,4 @@ p {
   &:active {
     color: var(--link-visited);
   }
-}
-
-.bottomContainer {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
 }

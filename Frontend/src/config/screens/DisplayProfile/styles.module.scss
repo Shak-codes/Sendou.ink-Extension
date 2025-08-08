@@ -1,0 +1,28 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.restartContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.text {
+  color: var(--text);
+  margin: 0;
+  padding: 0;
+}
+
+h2 {
+  font-family: "Lexend", "sans-serif";
+  font-weight: bold;
+}
+
+h3,
+p {
+  font-family: "Lexend", "sans-serif";
+  font-weight: 300;
+}
