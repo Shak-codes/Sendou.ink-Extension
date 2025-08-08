@@ -1,16 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import styles from "./styles.module.scss";
-import {
-  GET_PROFILE_DATA,
-  GET_TWITCH_NAME,
-  ADD_USER,
-  GET_USER,
-} from "./constants";
+import { GET_PROFILE_DATA, GET_TWITCH_NAME, ADD_USER } from "./constants";
 import { LinkProfile, VerifyProfile, DisplayProfile } from "./screens";
 
 const Config = () => {
+  const twitch = window.Twitch.ext;
   const [discordId, setDiscordId] = useState("");
-  const [ext, setExt] = useState(null);
   const [error, setError] = useState({
     message: null,
     display: false,
@@ -20,34 +15,24 @@ const Config = () => {
   const [displayProfile, setDisplayProfile] = useState(false);
 
   useEffect(() => {
-    const twitchExt = window.Twitch?.ext;
-
-    if (!twitchExt) {
-      return;
-    }
-
-    twitchExt.onAuthorized(async (auth) => {
-      twitchExt.channelId = auth.channelId;
-      console.log(`Channel ID: ${auth.channelId}`);
-
-      try {
-        const response = await fetch(`${GET_USER}/${auth.channelId}`);
-        const userData = await response.json();
-        console.log("Fetched user data:", userData);
-        setConfigData(userData);
+    twitch.configuration.onChanged(() => {
+      if (twitch.configuration.broadcaster) {
+        console.log("Found configuration data!");
+        setConfigData(JSON.parse(twitch.configuration.broadcaster.content));
         setDisplayProfile(true);
-      } catch (error) {
-        console.error("Failed to fetch user:", error);
       }
     });
 
-    setExt(twitchExt);
+    twitch.onAuthorized(async (auth) => {
+      twitch.channelId = auth.channelId;
+      console.log(`Channel ID: ${auth.channelId}`);
+    });
   }, []);
 
   const initiateLink = async () => {
     try {
       const [twitchResponse, profileResponse] = await Promise.all([
-        fetch(`${GET_TWITCH_NAME}/${ext.channelId}`),
+        fetch(`${GET_TWITCH_NAME}/${twitch.channelId}`),
         fetch(`${GET_PROFILE_DATA}/${discordId}`),
       ]);
 
@@ -69,7 +54,7 @@ const Config = () => {
 
       return {
         discord_id: discordId,
-        twitch_id: ext.channelId,
+        twitch_id: twitch.channelId,
         sendou_id: profileData.id,
         twitch_name: twitchName,
         sendou_name: profileData.name,
@@ -104,6 +89,8 @@ const Config = () => {
       if (!response.ok) {
         throw new Error(`Failed to save user config: ${response.status}`);
       }
+
+      twitch.configuration.set("broadcaster", "1", JSON.stringify(configData));
 
       const result = await response.json();
       console.log("User saved:", result);
