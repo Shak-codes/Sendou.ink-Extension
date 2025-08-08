@@ -6,7 +6,7 @@ function Button({
   onClick,
   onError = null,
   onSuccess = null,
-  animated,
+  animated = false,
   disabled = false,
 }) {
   const [state, setState] = useState("idle"); // 'idle' | 'loading' | 'loadingFade' | 'success' | 'failure'
