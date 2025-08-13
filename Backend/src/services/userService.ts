@@ -29,6 +29,10 @@ export const addUser = async (data: User): Promise<User> => {
     sendou_name,
     sendou_url,
     avatar_url,
+    team,
+    team_url,
+    team_role,
+    sendouq_rank,
     peak_rank,
   } = data;
 
@@ -36,16 +40,20 @@ export const addUser = async (data: User): Promise<User> => {
     const result = await pool.query<User>(
       `
       INSERT INTO users 
-        (discord_id, twitch_id, sendou_id, twitch_name, sendou_name, sendou_url, avatar_url, peak_rank)
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
+        (discord_id, twitch_id, sendou_id, twitch_name, sendou_name, sendou_url, avatar_url, peak_rank, team, team_url, team_role, sendouq_rank)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
       ON CONFLICT (twitch_id) DO UPDATE SET
-        discord_id = EXCLUDED.discord_id,
-        sendou_id = EXCLUDED.sendou_id,
-        twitch_name = EXCLUDED.twitch_name,
-        sendou_name = EXCLUDED.sendou_name,
-        sendou_url = EXCLUDED.sendou_url,
-        avatar_url = EXCLUDED.avatar_url,
-        peak_rank = EXCLUDED.peak_rank,
+        discord_id   = EXCLUDED.discord_id,
+        sendou_id    = EXCLUDED.sendou_id,
+        twitch_name  = EXCLUDED.twitch_name,
+        sendou_name  = EXCLUDED.sendou_name,
+        sendou_url   = EXCLUDED.sendou_url,
+        avatar_url   = EXCLUDED.avatar_url,
+        peak_rank    = EXCLUDED.peak_rank,
+        team         = EXCLUDED.team,
+        team_url     = EXCLUDED.team_url,
+        team_role    = EXCLUDED.team_role,
+        sendouq_rank = EXCLUDED.sendouq_rank
       RETURNING *;
       `,
       [
@@ -57,6 +65,10 @@ export const addUser = async (data: User): Promise<User> => {
         sendou_url,
         avatar_url,
         peak_rank,
+        team,
+        team_url,
+        team_role,
+        sendouq_rank,
       ]
     );
 
