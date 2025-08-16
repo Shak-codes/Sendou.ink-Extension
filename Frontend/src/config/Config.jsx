@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 import styles from "./styles.module.scss";
-import { GET_PROFILE_DATA, GET_TWITCH_NAME, ADD_USER } from "./constants";
+import {
+  GET_PROFILE_DATA,
+  GET_TWITCH_NAME,
+  ADD_USER,
+  GET_AVATAR,
+} from "./constants";
 import { LinkProfile, VerifyProfile, DisplayProfile } from "./screens";
 
 const Config = () => {
@@ -31,10 +36,12 @@ const Config = () => {
 
   const initiateLink = async () => {
     try {
-      const [twitchResponse, profileResponse] = await Promise.all([
-        fetch(`${GET_TWITCH_NAME}/${twitch.channelId}`),
-        fetch(`${GET_PROFILE_DATA}/${discordId}`),
-      ]);
+      const [twitchResponse, profileResponse, avatarResponse] =
+        await Promise.all([
+          fetch(`${GET_TWITCH_NAME}/${twitch.channelId}`),
+          fetch(`${GET_PROFILE_DATA}/${discordId}`),
+          fetch(`${GET_AVATAR}/${discordId}`),
+        ]);
 
       if (profileResponse.status === 404) {
         setError((prev) => ({ ...prev, message: "Invalid User ID" }));
@@ -47,20 +54,33 @@ const Config = () => {
         return;
       }
 
-      const [twitchName, profileData] = await Promise.all([
+      const [twitchName, profileData, avatarUrl] = await Promise.all([
         twitchResponse.json(),
         profileResponse.json(),
+        avatarResponse.json(),
       ]);
+
+      console.log("Avatar URL", avatarUrl);
+
+      const { currentRank, teams, id, name, url, peakXp } = profileData;
+      const team = teams?.[0];
+      const sendouq_rank = currentRank
+        ? `${currentRank.tier.name}${currentRank.tier.isPlus ? "+" : ""}`
+        : null;
 
       return {
         discord_id: discordId,
         twitch_id: twitch.channelId,
-        sendou_id: profileData.id,
+        sendou_id: id,
         twitch_name: twitchName,
-        sendou_name: profileData.name,
-        sendou_url: profileData.url,
-        avatar_url: profileData.avatarUrl,
-        peak_rank: null,
+        sendou_name: name,
+        sendou_url: url,
+        avatar_url: avatarUrl,
+        team: team?.name ?? null,
+        team_url: team?.teamPageUrl ?? null,
+        team_role: team?.role ?? null,
+        peak_rank: peakXp,
+        sendouq_rank,
       };
     } catch (error) {
       console.error("Failed to fetch data:", error);
