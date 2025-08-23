@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import styles from "./styles.module.scss";
 
 function Button({
+  variant = "normal",
+  selected = false,
   text,
   onClick,
   onError = null,
@@ -16,21 +18,23 @@ function Button({
 
     if (!animated) {
       const result = await onClick();
-      if (result === undefined || result === null) {
+      if (result.error && !!onError) {
         await onError();
         return;
       }
-      if (onSuccess) await onSuccess(result);
+      if (!!onSuccess) await onSuccess(result);
       return;
     }
 
     setState("loading");
+    console.log("OnClick!");
     const result = await onClick();
 
     setState("loadingFade");
+    console.log("Loading Fade!");
     await new Promise((r) => setTimeout(r, 750));
 
-    if (result === undefined || result === null) {
+    if (result.error) {
       setState("failure");
       await onError();
       await new Promise((r) => setTimeout(r, 1500));
@@ -46,7 +50,10 @@ function Button({
   };
 
   const ButtonClasses = (state) => {
-    const baseClass = styles.button;
+    const baseClass =
+      variant === "radio" && selected
+        ? `${styles.button} ${styles.selected}`
+        : styles.button;
 
     switch (state) {
       case "loading":

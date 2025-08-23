@@ -42,7 +42,8 @@
     pointer-events: none;
   }
 
-  &:not(:disabled):hover {
+  &:not(:disabled):hover,
+  &.selected {
     border: 2px solid var(--button-active-bg);
     background-color: var(--button-active-bg);
     color: var(--button-active-text);

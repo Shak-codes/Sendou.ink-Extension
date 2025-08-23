@@ -20,7 +20,7 @@ const Input = ({
           type={type === "password" && !showPassword ? "password" : "text"}
           id={id}
           className={`${styles.roundedInput} ${value ? styles.active : ""} ${
-            error.display ? styles.errorInput : ""
+            !!error ? styles.errorInput : ""
           }`}
           value={value}
           onFocus={onFocus}
@@ -33,7 +33,7 @@ const Input = ({
           {label}
         </label>
       </div>
-      {error.display && <span className={styles.error}>{error.message}</span>}
+      {!!error && <span className={styles.error}>{error}</span>}
       {help && <span className={styles.help}>{help}</span>}
     </div>
   );
