@@ -19,10 +19,11 @@ function Button({
     if (!animated) {
       const result = await onClick();
       if (result.error && !!onError) {
-        await onError();
+        await onError(result);
         return;
       }
       if (!!onSuccess) await onSuccess(result);
+      setState("idle");
       return;
     }
 
@@ -36,7 +37,7 @@ function Button({
 
     if (result.error) {
       setState("failure");
-      await onError();
+      onError(result);
       await new Promise((r) => setTimeout(r, 1500));
       setState("idle");
       return;
@@ -73,7 +74,7 @@ function Button({
     <button
       onClick={handleClick}
       className={ButtonClasses(state)}
-      disabled={disabled}
+      disabled={disabled || state !== "idle"}
     >
       <div className={styles.buttonContent}>{text}</div>
       {(state == "loading" || state === "loadingFade") && (
