@@ -85,3 +85,14 @@
   font-size: 12px;
   color: #fff;
 }
+
+.roundedInput:-webkit-autofill {
+  box-shadow: 0 0 0 1000px var(--background) inset !important;
+  -webkit-text-fill-color: #fff !important;
+  transition: background-color 9999s ease-in-out 0s !important; // prevents flashing
+}
+
+.roundedInput:-webkit-autofill:focus {
+  box-shadow: 0 0 0 1000px var(--background) inset !important;
+  -webkit-text-fill-color: #fff !important;
+}
