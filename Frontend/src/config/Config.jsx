@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import styles from "./styles.module.scss";
-import { getUserData, saveUserData, validUserData } from "./utils";
-import { ConfigureScreen, VerifyProfile, DisplayProfile } from "./screens";
+import { getUserData, validUserData } from "./utils";
+import { ConfigureScreen, VerifyScreen, DisplayProfile } from "./screens";
 
 const Config = () => {
   const twitch = window.Twitch.ext;
   const [discordId, setDiscordId] = useState("");
   const [scoringMethod, setScoringMethod] = useState("manual"); // One of 'manual' | 'lazy'
-  const [configData, setConfigData] = useState(null);
+  const [userData, setUserData] = useState(null);
+  const [config, setConfig] = useState(null);
   const [error, setError] = useState(null);
   const [screen, setScreen] = useState("loading"); // One of 'loading' | 'configure' | 'verify' | 'details'
 
@@ -16,7 +17,7 @@ const Config = () => {
       const save = twitch.configuration.broadcaster;
       if (save && validUserData(JSON.parse(save.content))) {
         console.log("Found configuration data!");
-        setConfigData(JSON.parse(twitch.configuration.broadcaster.content));
+        setConfig(JSON.parse(twitch.configuration.broadcaster.content));
         setScreen("details");
       } else {
         console.log("Could not find valid user data!");
@@ -30,34 +31,36 @@ const Config = () => {
     });
   }, []);
 
-  const successGetUserData = (response) => {
-    console.log("Got user data!");
-    setConfigData(response.data);
-  };
-
-  const failGetUserData = (response) => {
-    console.log("Failed to get user data");
-    setError(response.error);
-  };
-
-  const updateConfig = async (data) => {
-    setConfigData(data);
-    setVerifyData(true);
-  };
-
-  const resetConfig = () => {
-    setConfigData(null);
-    setDiscordId("");
-    setVerifyData(false);
-    console.log("Reset values!");
-  };
-
   const handleDiscordId = (e) => {
     setDiscordId(e.target.value);
   };
 
-  const handleScoring = (method) => {
-    setScoringMethod(method);
+  const successGetUserData = (response) => {
+    console.log("Got user data!");
+    setUserData(response.data);
+    setScreen("verify");
+  };
+
+  const onError = (response) => {
+    setError(response.error);
+  };
+
+  const resetData = () => {
+    setConfig(null);
+    setDiscordId("");
+    setScoringMethod("manual");
+    setScreen("configure");
+    console.log("Reset values!");
+  };
+
+  const saveToConfig = () => {
+    const data = {
+      ...userData,
+      scoringMethod,
+    };
+    twitch.configuration.set("broadcaster", "1", JSON.stringify(data));
+    setConfig(data);
+    setScreen("details");
   };
 
   return (
@@ -73,23 +76,27 @@ const Config = () => {
           actions={{
             handleDiscordId,
             setScoringMethod,
-            failGetUserData,
+            onError,
             successGetUserData,
             getUserData,
           }}
         />
       )}
-      {/* {screen === "verify" && (
-        <VerifyProfile
-          resetConfig={resetConfig}
-          configData={configData}
-          saveConfig={saveConfig}
-          error={error}
-          onError={onError}
-          onSuccess={verifySuccess}
+      {screen === "verify" && (
+        <VerifyScreen
+          data={{
+            userData,
+            scoringMethod,
+            error,
+          }}
+          actions={{
+            resetData,
+            saveToConfig,
+            onError,
+          }}
         />
       )}
-      {screen === "details" && (
+      {/* {screen === "details" && (
         <DisplayProfile data={configData} resetConfig={resetConfig} />
       )} */}
     </div>

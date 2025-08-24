@@ -3,6 +3,7 @@ import {
   GET_AVATAR,
   GET_PROFILE_DATA,
   GET_TWITCH_NAME,
+  ADD_USER,
 } from "./constants";
 
 export const getUserData = async (channelId, discordId) => {
@@ -59,7 +60,7 @@ export const getUserData = async (channelId, discordId) => {
   }
 };
 
-export const saveUserData = async (twitch, userData) => {
+export const saveToBackend = async (userData) => {
   try {
     const response = await fetch(ADD_USER, {
       method: "POST",
@@ -76,8 +77,6 @@ export const saveUserData = async (twitch, userData) => {
         error: "Server error. Please try again later.",
       };
     }
-
-    twitch.configuration.set("broadcaster", "1", JSON.stringify(userData));
 
     return {
       response: response.json(),

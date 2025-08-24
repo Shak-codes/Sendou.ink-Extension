@@ -9,7 +9,7 @@ const ConfigureScreen = ({ data, actions }) => {
     handleDiscordId,
     setScoringMethod,
     getUserData,
-    failGetUserData,
+    onError,
     successGetUserData,
   } = actions;
   return (
@@ -80,7 +80,7 @@ const ConfigureScreen = ({ data, actions }) => {
         animated
         text="Link Account"
         onClick={() => getUserData(channelId, discordId)}
-        onError={failGetUserData}
+        onError={onError}
         onSuccess={successGetUserData}
         disabled={!discordId}
       />
