@@ -1,0 +1,56 @@
+@use "./colors.scss";
+
+h2,
+h3,
+h4,
+p {
+  font-family: "Lexend", "sans-serif";
+  color: var(--text);
+  margin: 0;
+  padding: 0;
+}
+
+h2 {
+  font-weight: bold;
+  font-size: x-large;
+}
+
+h3,
+h4,
+p {
+  font-weight: 300;
+}
+
+h3 {
+  font-size: large;
+}
+
+p {
+  font-size: 14px;
+}
+
+.link {
+  color: var(--link-default);
+
+  &:visited {
+    color: var(--link-default);
+  }
+
+  &:hover {
+    color: var(--link-visited);
+  }
+
+  &:active {
+    color: var(--link-visited);
+  }
+}
+
+.label {
+  font-size: 10px;
+  font-family: "Lexend", sans-serif;
+  font-weight: 300;
+}
+
+.bold {
+  font-weight: bold;
+}

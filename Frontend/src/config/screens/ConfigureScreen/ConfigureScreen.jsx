@@ -15,14 +15,12 @@ const ConfigureScreen = ({ data, actions }) => {
   return (
     <section className={styles.container}>
       <header>
-        <h2 className={styles.text}>Welcome!</h2>
-        <h3 className={styles.text}>
-          To set up this extension, please fill in the following.
-        </h3>
+        <h2>Welcome!</h2>
+        <h3>To set up this extension, please fill in the following.</h3>
       </header>
-      <main>
+      <main className={styles.mainContainer}>
         <section className={styles.userIdContainer}>
-          <h4 className={styles.text}>
+          <h4>
             Please provide the 'User ID' of the Discord account linked to your
             Sendou.ink account.
           </h4>
@@ -34,7 +32,7 @@ const ConfigureScreen = ({ data, actions }) => {
             help={
               <>
                 Can't find your User ID? Read this{" "}
-                <a className={styles.link} href={URLS.USER_ID} target="_blank">
+                <a className="link" href={URLS.USER_ID} target="_blank">
                   article
                 </a>
               </>
@@ -43,21 +41,23 @@ const ConfigureScreen = ({ data, actions }) => {
           />
         </section>
         <section className={styles.scoringContainer}>
-          <h4 className={styles.text}>Please select a scoring method.</h4>
+          <h4>Please select a scoring method.</h4>
           {scoringMethod === "manual" && (
-            <p className={styles.text}>
+            <p>
               Sendou.ink doesn't support automatic score updates for SendouQ
-              matches. With manual scoring, the scoreboard will be present
-              during a set, and either you(the streamer) or a moderator have to
-              update the scoreboard within the extension after each match.
+              matches. With <span className="bold">manual scoring</span>, the
+              scoreboard will be present during a set, and either you(the
+              streamer) or a moderator have to update the scoreboard within the
+              extension after each match.
             </p>
           )}
           {scoringMethod === "lazy" && (
-            <p className={styles.text}>
+            <p>
               Sendou.ink doesn't support automatic score updates for SendouQ
-              matches. With lazy scoring, the scoreboard will not be present
-              during a set. Upon the set finishing, the scoreboard will be
-              displayed for a brief period of time with the final score.
+              matches. With <span className="bold">lazy scoring</span>, the
+              scoreboard will not be present during a set. Upon the set
+              finishing, the scoreboard will be displayed for a brief period of
+              time with the final score.
             </p>
           )}
           <section className={styles.buttonContainer}>

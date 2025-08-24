@@ -4,59 +4,22 @@
   gap: 1rem;
 }
 
-.userIdContainer {
+.mainContainer {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+
+.userIdContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .scoringContainer {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-}
-
-.text {
-  color: var(--text);
-  margin: 0;
-  padding: 0;
-}
-
-h2 {
-  font-family: "Lexend", "sans-serif";
-  font-weight: bold;
-}
-
-h3 {
-  font-family: "Lexend", sans-serif;
-  font-weight: 300;
-}
-
-h4 {
-  font-family: "Lexend", sans-serif;
-  font-weight: 300;
-}
-
-p {
-  font-family: "Lexend", sans-serif;
-  font-weight: 300;
-  font-size: 14px;
-}
-
-.link {
-  color: var(--link-default);
-
-  &:visited {
-    color: var(--link-default);
-  }
-
-  &:hover {
-    color: var(--link-visited);
-  }
-
-  &:active {
-    color: var(--link-visited);
-  }
+  gap: 0.5rem;
 }
 
 .buttonContainer {

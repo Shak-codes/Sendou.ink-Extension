@@ -9,12 +9,12 @@ const VerifyScreen = ({ data, actions }) => {
   return (
     <section className={styles.container}>
       <header>
-        <h2 className={styles.text}>Verify</h2>
-        <h3 className={styles.text}>Is the data below correct?</h3>
+        <h2>Verify</h2>
+        <h3>Is the data below correct?</h3>
       </header>
       <Profile userData={userData} />
-      <h4 className={styles.text}>Scoring Method: {scoringMethod}</h4>
-      <p className={styles.text}>Your scoreboard will look as follows</p>
+      <h4>Scoring Method: {scoringMethod}</h4>
+      <p>Your scoreboard will look as follows</p>
       <div className={styles.buttonContainer}>
         <Button text="Go back" onClick={resetData} />
         <Button

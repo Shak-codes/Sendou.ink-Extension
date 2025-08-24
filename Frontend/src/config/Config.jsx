@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import styles from "./styles.module.scss";
 import { getUserData, validUserData } from "./utils";
-import { ConfigureScreen, VerifyScreen, DisplayProfile } from "./screens";
+import { ConfigureScreen, VerifyScreen, DetailsScreen } from "./screens";
 
 const Config = () => {
   const twitch = window.Twitch.ext;
@@ -45,8 +45,8 @@ const Config = () => {
     setError(response.error);
   };
 
-  const resetData = () => {
-    setConfig(null);
+  const reset = () => {
+    setUserData(null);
     setDiscordId("");
     setScoringMethod("manual");
     setScreen("configure");
@@ -56,7 +56,7 @@ const Config = () => {
   const saveToConfig = () => {
     const data = {
       ...userData,
-      scoringMethod,
+      scoring_method: scoringMethod,
     };
     twitch.configuration.set("broadcaster", "1", JSON.stringify(data));
     setConfig(data);
@@ -90,15 +90,15 @@ const Config = () => {
             error,
           }}
           actions={{
-            resetData,
+            resetData: reset,
             saveToConfig,
             onError,
           }}
         />
       )}
-      {/* {screen === "details" && (
-        <DisplayProfile data={configData} resetConfig={resetConfig} />
-      )} */}
+      {screen === "details" && (
+        <DetailsScreen data={config} resetConfig={reset} />
+      )}
     </div>
   );
 };

@@ -23,6 +23,11 @@
   display: inline-block;
 }
 
+.userInfo {
+  display: flex;
+  flex-direction: column;
+}
+
 .teamContainer {
   display: flex;
 }
