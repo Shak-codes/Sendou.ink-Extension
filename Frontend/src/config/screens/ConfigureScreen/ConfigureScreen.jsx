@@ -2,6 +2,9 @@ import Input from "../../../components/Input/Input";
 import Button from "../../../components/Button/Button";
 import styles from "./styles.module.scss";
 import { URLS } from "../../../../public/constants";
+import manualScoring from "/images/manualScoring.png";
+import lazyScoring from "/images/lazyScoring.png";
+import finalScore from "/images/scoreEnd.png";
 
 const ConfigureScreen = ({ data, actions }) => {
   const { channelId, discordId, scoringMethod, error } = data;
@@ -60,6 +63,19 @@ const ConfigureScreen = ({ data, actions }) => {
               time with the final score.
             </p>
           )}
+          <section className={styles.scoreExampleContainer}>
+            <section className={styles.scoreExamples}>
+              <p className="bold">During the set</p>
+              <img
+                className={styles.scoreImage}
+                src={scoringMethod === "manual" ? manualScoring : lazyScoring}
+              />
+            </section>
+            <section>
+              <p className="bold">After the set</p>
+              <img className={styles.scoreImage} src={finalScore} />
+            </section>
+          </section>
           <section className={styles.buttonContainer}>
             <Button
               variant="radio"

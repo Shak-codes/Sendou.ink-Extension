@@ -4,6 +4,27 @@
   gap: 2rem;
 }
 
+.scoringMethod {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.scoreExampleContainer {
+  display: flex;
+  gap: 2rem;
+}
+
+.scoreExamples {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.scoreImage {
+  width: 80%;
+}
+
 .restartContainer {
   display: flex;
   flex-direction: column;
