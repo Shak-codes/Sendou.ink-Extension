@@ -186,7 +186,7 @@ export const testData = {
         discordId: "1011738688289517679",
         url: "https://sendou.ink/u/1011738688289517679",
         avatarUrl:
-          "https://cdn.discordapp.com/avatars/1011738688289517679/8249987d0e7fae38463b9aeb795bfdea.png",
+          "https://cdn.discordapp.com/avatars/212673938474401796/905210abdb4b8e6446bc372a26d23cfb",
         userId: 42433,
         rank: {
           name: "GOLD",

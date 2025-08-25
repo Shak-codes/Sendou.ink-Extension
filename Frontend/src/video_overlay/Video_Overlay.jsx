@@ -4,7 +4,7 @@ import Profile from "../components/Profile/Profile";
 import SendouQ from "./SendouQ/SendouQ";
 import { testData } from "./SendouQ/testData";
 
-const Panel = () => {
+const Video_Overlay = () => {
   const twitch = window.Twitch.ext;
   const [configData, setConfigData] = useState(null);
   const [display, setDisplay] = useState("profile"); // One of: profile | sendouq | tournament(TBD at a later date)
@@ -50,4 +50,4 @@ const Panel = () => {
   );
 };
 
-export default Panel;
+export default Video_Overlay;

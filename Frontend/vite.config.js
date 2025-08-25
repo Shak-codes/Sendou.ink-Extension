@@ -37,8 +37,8 @@ export default defineConfig({
     outDir: "dist",
     rollupOptions: {
       input: {
-        panel: resolve(__dirname, "panel.html"),
         config: resolve(__dirname, "config.html"),
+        video_overlay: resolve(__dirname, "video_overlay.html"),
       },
       output: {
         entryFileNames: "assets/[name].js",
