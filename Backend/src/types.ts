@@ -48,7 +48,14 @@ interface Team {
   role: string;
 }
 
-export interface SendouData {
+export interface TeamData {
+  id: number;
+  name: string;
+  teamPageUrl: string;
+  logoUrl: string;
+}
+
+export interface ProfileData {
   id: string;
   name: string;
   discordId: string;
@@ -62,4 +69,15 @@ export interface SendouData {
   weaponPool: Weapon[];
   badges: Badge[];
   teams: Team[];
+}
+
+export interface UserData {
+  discordId: string;
+  sendouId: string;
+  sendouName: string;
+  sendouUrl: string;
+  avatarUrl: string;
+  sqRank: SendouqRank["tier"] | null;
+  peakXp: string | null;
+  team: TeamData | null;
 }
