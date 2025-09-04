@@ -35,15 +35,31 @@ interface Badge {
   imageUrl: string;
 }
 
+interface SendouqRank {
+  season: number;
+  tier: {
+    name: string;
+    isPlus: boolean;
+  };
+}
+
+interface Team {
+  id: number;
+  role: string;
+}
+
 export interface SendouData {
   id: string;
   name: string;
   discordId: string;
   avatarUrl: string;
+  url: string;
   country: string;
   plusServerTier: string | null;
   socials: Socials;
+  currentRank: SendouqRank | null;
   peakXp: string | null;
   weaponPool: Weapon[];
   badges: Badge[];
+  teams: Team[];
 }
