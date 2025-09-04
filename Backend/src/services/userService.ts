@@ -1,19 +1,17 @@
-import { pool } from "../db";
+import { supabase } from "../db";
 import { User } from "../types";
 
-export const getUser = async (twitch_id: string): Promise<User | null> => {
+export const getUser = async (twitchId: string): Promise<User | null> => {
   try {
-    const result = await pool.query<User>(
-      `
-      UPDATE users 
-      SET last_fetched = NOW() 
-      WHERE twitch_id = $1 
-      RETURNING *
-    `,
-      [twitch_id]
-    );
+    const { data, error } = await supabase
+      .from("users")
+      .update({ lastFetched: new Date().toISOString() })
+      .eq("twitchId", twitchId)
+      .select()
+      .single();
 
-    return result.rows[0] || null;
+    if (error) throw error;
+    return data as User;
   } catch (error) {
     console.error("Error getting user:", error);
     throw error;
@@ -21,58 +19,15 @@ export const getUser = async (twitch_id: string): Promise<User | null> => {
 };
 
 export const addUser = async (data: User): Promise<User> => {
-  const {
-    discord_id,
-    twitch_id,
-    sendou_id,
-    twitch_name,
-    sendou_name,
-    sendou_url,
-    avatar_url,
-    team,
-    team_url,
-    team_role,
-    sendouq_rank,
-    peak_rank,
-  } = data;
-
   try {
-    const result = await pool.query<User>(
-      `
-      INSERT INTO users 
-        (discord_id, twitch_id, sendou_id, twitch_name, sendou_name, sendou_url, avatar_url, peak_rank, team, team_url, team_role, sendouq_rank)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
-      ON CONFLICT (twitch_id) DO UPDATE SET
-        discord_id   = EXCLUDED.discord_id,
-        sendou_id    = EXCLUDED.sendou_id,
-        twitch_name  = EXCLUDED.twitch_name,
-        sendou_name  = EXCLUDED.sendou_name,
-        sendou_url   = EXCLUDED.sendou_url,
-        avatar_url   = EXCLUDED.avatar_url,
-        peak_rank    = EXCLUDED.peak_rank,
-        team         = EXCLUDED.team,
-        team_url     = EXCLUDED.team_url,
-        team_role    = EXCLUDED.team_role,
-        sendouq_rank = EXCLUDED.sendouq_rank
-      RETURNING *;
-      `,
-      [
-        discord_id,
-        twitch_id,
-        sendou_id,
-        twitch_name,
-        sendou_name,
-        sendou_url,
-        avatar_url,
-        peak_rank,
-        team,
-        team_url,
-        team_role,
-        sendouq_rank,
-      ]
-    );
+    const { data: user, error } = await supabase
+      .from("users")
+      .upsert(data, { onConflict: "twitchId" }) // replaces INSERT ... ON CONFLICT
+      .select()
+      .single();
 
-    return result.rows[0];
+    if (error) throw error;
+    return user as User;
   } catch (error) {
     console.error("Error adding user:", error);
     throw error;
@@ -80,21 +35,40 @@ export const addUser = async (data: User): Promise<User> => {
 };
 
 export const deleteInactiveUsers = async () => {
-  const result = await pool.query(
-    "DELETE FROM users WHERE last_requested < NOW() - INTERVAL '30 days'"
-  );
-  console.log(`Deleted ${result.rowCount} inactive users`);
-  return result.rowCount;
+  try {
+    const { count, error } = await supabase
+      .from("users")
+      .delete({ count: "exact" })
+      .lt(
+        "lastFetched",
+        new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
+      );
+
+    if (error) throw error;
+    console.log(`Deleted ${count} inactive users`);
+    return count ?? 0;
+  } catch (error) {
+    console.error("Error deleting inactive users:", error);
+    throw error;
+  }
 };
 
-export const get_identifiers = async (): Promise<
-  { twitch_name: string; sendou_id: number }[]
+export const getIdentifiers = async (): Promise<
+  {
+    discordId: string;
+    twitchId: string;
+    sendouId: string;
+    twitchName: string;
+    sendouName: string;
+  }[]
 > => {
   try {
-    const result = await pool.query(
-      "SELECT discord_id, twitch_id, sendou_id, twitch_name, sendou_name FROM users"
-    );
-    return result.rows;
+    const { data, error } = await supabase
+      .from("users")
+      .select("discordId, twitchId, sendouId, twitchName, sendouName");
+
+    if (error) throw error;
+    return data || [];
   } catch (error) {
     console.error("Error fetching identifiers:", error);
     throw error;

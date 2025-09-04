@@ -1,12 +1,12 @@
 import express, { Request, Response, Router } from "express";
-import { getUser, get_identifiers, addUser } from "../services/userService";
+import { getUser, getIdentifiers, addUser } from "../services/userService";
 import { userRequestLimiter } from "../middleware/rateLimiter";
 
 const router: Router = express.Router();
 
 router.get("/identifiers", async (_req, res) => {
   try {
-    const names = await get_identifiers();
+    const names = await getIdentifiers();
     res.status(200).json(names);
   } catch (error) {
     console.error("Error in GET /api/users/identifiers:", error);
