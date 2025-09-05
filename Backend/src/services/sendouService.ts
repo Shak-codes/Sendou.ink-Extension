@@ -1,11 +1,13 @@
-import { TeamData, UserData, ProfileData } from "../types";
+import { TeamData, SendouData, UserDataResponse } from "../types";
 import dotenv from "dotenv";
 
 if (process.env.NODE_ENV !== "production") {
   dotenv.config();
 }
 
-export const fetchUserData = async (discord_id: string): Promise<UserData> => {
+export const fetchUserData = async (
+  discord_id: string
+): Promise<UserDataResponse> => {
   const SINK_ROUTE = process.env.SINK_ROUTE;
   const SINK_TOKEN = process.env.SINK_TOKEN;
 
@@ -31,14 +33,14 @@ export const fetchUserData = async (discord_id: string): Promise<UserData> => {
     throw error;
   }
 
-  const profileData = (await profileResponse.json()) as ProfileData;
+  const profileData = (await profileResponse.json()) as SendouData;
 
   const {
     discordId,
     id: sendouId,
     name: sendouName,
     url: sendouUrl,
-    avatarUrl,
+    avatarUrl: sendouAvatarUrl,
     peakXp,
     currentRank,
     teams,
@@ -50,7 +52,7 @@ export const fetchUserData = async (discord_id: string): Promise<UserData> => {
     sendouId,
     sendouName,
     sendouUrl,
-    avatarUrl,
+    sendouAvatarUrl,
     sqRank,
     peakXp,
   };
@@ -61,7 +63,7 @@ export const fetchUserData = async (discord_id: string): Promise<UserData> => {
       team: null,
     };
 
-  const { id: teamId } = teams[0];
+  const { id: teamId, role } = teams[0];
 
   const teamUrl = `${SINK_ROUTE}/team/${teamId}`;
   const teamResponse = await fetch(teamUrl, {
@@ -84,6 +86,9 @@ export const fetchUserData = async (discord_id: string): Promise<UserData> => {
 
   return {
     ...userData,
-    team: teamData,
+    team: {
+      ...teamData,
+      role,
+    },
   };
 };

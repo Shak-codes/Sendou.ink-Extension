@@ -53,7 +53,11 @@ export interface TeamData {
   logoUrl: string;
 }
 
-export interface ProfileData {
+export interface TeamMembership extends TeamData {
+  role: string;
+}
+
+export interface SendouData {
   id: string;
   name: string;
   discordId: string;
@@ -69,7 +73,14 @@ export interface ProfileData {
   teams: Team[];
 }
 
-export interface UserData {
+export interface UserRecord {
+  discordId: string;
+  sendouId: string;
+  sendouName: string;
+  sendouUrl: string;
+}
+
+export interface UserDataResponse {
   discordId: string;
   sendouId: string;
   sendouName: string;
@@ -77,5 +88,5 @@ export interface UserData {
   sendouAvatarUrl: string;
   sqRank: SendouqRank["tier"] | null;
   peakXp: string | null;
-  team: TeamData | null;
+  team: TeamMembership | null;
 }
