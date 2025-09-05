@@ -24,12 +24,12 @@ router.post("/signup", userRequestLimiter, async (req, res) => {
 });
 
 router.get(
-  "/:twitch_id",
-  async (req: Request<{ twitch_id: string }>, res: Response): Promise<void> => {
-    const { twitch_id } = req.params;
+  "/:twitchId",
+  async (req: Request<{ twitchId: string }>, res: Response): Promise<void> => {
+    const { twitchId } = req.params;
 
     try {
-      const user = await getUser(twitch_id);
+      const user = await getUser(twitchId);
       if (!user) {
         res.status(404).json({ error: "User not found" });
         return;
@@ -37,7 +37,7 @@ router.get(
 
       res.status(200).json(user);
     } catch (err) {
-      console.error("Error in GET /user/:twitch_id", err);
+      console.error("Error in GET /user/:twitchId", err);
       res.status(500).json({ error: "Internal server error" });
     }
   }

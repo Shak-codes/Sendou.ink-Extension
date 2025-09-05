@@ -74,7 +74,7 @@ export interface UserData {
   sendouId: string;
   sendouName: string;
   sendouUrl: string;
-  avatarUrl: string;
+  sendouAvatarUrl: string;
   sqRank: SendouqRank["tier"] | null;
   peakXp: string | null;
   team: TeamData | null;
