@@ -1,18 +1,3 @@
-export interface User {
-  id: number;
-  discordId: string;
-  sendouId: string;
-  twitchId: string;
-  sendouName: string;
-  twitchName: string;
-  sendouUrl: string;
-  avatarUrl: string;
-  sqRank: SendouqRank["tier"] | null;
-  peakXp: string | null;
-  team: TeamData | null;
-  lastFetched: Date;
-}
-
 interface Socials {
   twitch: string | null;
   battlefy: string | null;
@@ -76,8 +61,9 @@ export interface SendouData {
 export interface UserRecord {
   discordId: string;
   sendouId: string;
+  twitchId: string;
   sendouName: string;
-  sendouUrl: string;
+  twitchName: string;
 }
 
 export interface UserDataResponse {
