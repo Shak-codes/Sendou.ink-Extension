@@ -40,7 +40,7 @@ export const fetchUserData = async (
     id: sendouId,
     name: sendouName,
     url: sendouUrl,
-    avatarUrl: sendouAvatarUrl,
+    avatarUrl,
     peakXp,
     currentRank,
     teams,
@@ -52,7 +52,7 @@ export const fetchUserData = async (
     sendouId,
     sendouName,
     sendouUrl,
-    sendouAvatarUrl,
+    avatarUrl,
     sqRank,
     peakXp,
   };

@@ -71,7 +71,7 @@ export interface UserDataResponse {
   sendouId: string;
   sendouName: string;
   sendouUrl: string;
-  sendouAvatarUrl: string;
+  avatarUrl: string;
   sqRank: SendouqRank["tier"] | null;
   peakXp: string | null;
   team: TeamMembership | null;
