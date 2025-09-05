@@ -9,13 +9,13 @@ const DetailsScreen = ({ data, resetConfig }) => {
   return (
     <section className={styles.container}>
       <header>
-        <h2>Hey there, {data.twitch_name}!</h2>
+        <h2>Hey there, {data.twitchName}!</h2>
         <h3>Here's your current Sendou.ink data</h3>
       </header>
       <Profile userData={data} />
 
       <section className={styles.scoreMethodContainer}>
-        <h4>Scoring Method: {data.scoring_method}</h4>
+        <h4>Scoring Method: {data.scoringMethod}</h4>
         <p>Your scoreboard will look as follows</p>
         <section className={styles.scoreExampleContainer}>
           <section className={styles.scoreExamples}>

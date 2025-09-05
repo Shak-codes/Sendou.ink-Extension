@@ -71,7 +71,7 @@ const ConfigureScreen = ({ data, actions }) => {
                 src={scoringMethod === "manual" ? manualScoring : lazyScoring}
               />
             </section>
-            <section>
+            <section className={styles.scoreExamples}>
               <p className="bold">After the set</p>
               <img className={styles.scoreImage} src={finalScore} />
             </section>

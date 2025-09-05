@@ -9,6 +9,16 @@ import finalScore from "/images/scoreEnd.png";
 const VerifyScreen = ({ data, actions }) => {
   const { userData, scoringMethod, error } = data;
   const { resetData, saveToConfig, onError } = actions;
+  const { discordId, sendouId, twitchId, sendouName, twitchName } = userData;
+  const userRecord = {
+    discordId,
+    sendouId,
+    twitchId,
+    sendouName,
+    twitchName,
+  };
+
+  console.log("userData: ", userData);
   return (
     <section className={styles.container}>
       <header>
@@ -40,7 +50,7 @@ const VerifyScreen = ({ data, actions }) => {
         <Button
           animated
           text="Looks good!"
-          onClick={() => saveToBackend(userData)}
+          onClick={() => saveToBackend(userRecord)}
           onError={onError}
           onSuccess={() => saveToConfig()}
         />

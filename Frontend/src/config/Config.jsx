@@ -56,7 +56,7 @@ const Config = () => {
   const saveToConfig = () => {
     const data = {
       ...userData,
-      scoring_method: scoringMethod,
+      scoringMethod,
     };
     twitch.configuration.set("broadcaster", "1", JSON.stringify(data));
     setConfig(data);

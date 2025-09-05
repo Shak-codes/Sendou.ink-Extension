@@ -8,13 +8,12 @@ import {
 
 export const getUserData = async (channelId, discordId) => {
   try {
-    const [twitchResponse, profileResponse, avatarResponse] = await Promise.all(
-      [
+    const [twitchResponse, profileResponse, discordAvatarResponse] =
+      await Promise.all([
         fetch(`${GET_TWITCH_NAME}/${channelId}`),
         fetch(`${GET_PROFILE_DATA}/${discordId}`),
         fetch(`${GET_AVATAR}/${discordId}`),
-      ]
-    );
+      ]);
 
     if (profileResponse.status === 404) {
       return { data: null, error: "Invalid User ID" };
@@ -25,32 +24,17 @@ export const getUserData = async (channelId, discordId) => {
       };
     }
 
-    const [twitchName, profileData, avatarUrl] = await Promise.all([
+    const [twitchName, profileData, discordAvatarUrl] = await Promise.all([
       twitchResponse.json(),
       profileResponse.json(),
-      avatarResponse.json(),
+      discordAvatarResponse.json(),
     ]);
-
-    const { currentRank, teams, id, name, url, peakXp } = profileData;
-    const team = teams?.[0];
-    const sendouq_rank = currentRank
-      ? `${currentRank.tier.name}${currentRank.tier.isPlus ? "+" : ""}`
-      : null;
 
     return {
       data: {
-        discord_id: discordId,
-        twitch_id: channelId,
-        sendou_id: id,
-        twitch_name: twitchName,
-        sendou_name: name,
-        sendou_url: url,
-        avatar_url: avatarUrl,
-        team: team?.name ?? null,
-        team_url: team?.teamPageUrl ?? null,
-        team_role: team?.role ?? null,
-        peak_rank: peakXp,
-        sendouq_rank,
+        ...profileData,
+        twitchId: channelId,
+        twitchName,
       },
       error: null,
     };

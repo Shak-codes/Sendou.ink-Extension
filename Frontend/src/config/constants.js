@@ -15,14 +15,15 @@ export const MAP_ASSETS =
   "https://shak-codes.github.io/Sendou.ink-Extension-Assets";
 
 export const FIELDS = [
-  "discord_id",
-  "twitch_id",
-  "sendou_id",
-  "twitch_name",
-  "sendou_name",
-  "sendou_url",
-  "avatar_url",
-  "peak_rank",
-  "sendouq_rank",
-  "scoring_method",
+  "discordId",
+  "twitchId",
+  "sendouId",
+  "twitchName",
+  "sendouName",
+  "sendouUrl",
+  "avatarUrl",
+  "sqRank",
+  "peakXp",
+  "scoringMethod",
+  "team",
 ];
