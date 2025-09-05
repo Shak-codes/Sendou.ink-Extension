@@ -1,5 +1,5 @@
 import { supabase } from "../db";
-import { User, UserRecord } from "../types";
+import { UserRecord } from "../types";
 
 export const getUser = async (twitchId: string): Promise<UserRecord | null> => {
   try {
@@ -11,14 +11,14 @@ export const getUser = async (twitchId: string): Promise<UserRecord | null> => {
       .single();
 
     if (error) throw error;
-    return data as User;
+    return data as UserRecord;
   } catch (error) {
     console.error("Error getting user:", error);
     throw error;
   }
 };
 
-export const addUser = async (data: User): Promise<UserRecord> => {
+export const addUser = async (data: UserRecord): Promise<UserRecord> => {
   try {
     const { data: user, error } = await supabase
       .from("users")
