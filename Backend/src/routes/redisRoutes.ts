@@ -7,6 +7,7 @@ import {
 } from "../services/redisService";
 import config from "../config";
 import Redis from "ioredis";
+import { broadcast } from "../services/sseService";
 
 const router: Router = express.Router();
 
@@ -29,6 +30,8 @@ router.post("/update", userRequestLimiter, async (req, res) => {
           `twitch:${matchRef.twitchId}`,
           JSON.stringify(matchData)
         );
+
+        broadcast(matchRef.twitchId, "matchUpdated", matchData);
       })
     );
 
