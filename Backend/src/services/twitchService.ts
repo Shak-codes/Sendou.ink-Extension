@@ -2,7 +2,7 @@ import { getExtensionToken } from "./utils";
 import config from "../config";
 
 export const getDisplayName = async (channel_id: string): Promise<string> => {
-  const accessToken = await getExtensionToken();
+  const token = await getExtensionToken();
 
   const { TWITCH_HELIX_ROUTE, TWITCH_CLIENT_ID } = config;
   if (!TWITCH_HELIX_ROUTE) {
@@ -15,7 +15,7 @@ export const getDisplayName = async (channel_id: string): Promise<string> => {
     method: "GET",
     headers: {
       "Client-ID": TWITCH_CLIENT_ID ?? "",
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: `Bearer ${token}`,
     },
   });
 

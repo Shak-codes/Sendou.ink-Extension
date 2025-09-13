@@ -1,76 +1,6 @@
 import Redis from "ioredis";
-import { supabase } from "../db";
 import { TokenResponse } from "./types";
 import config from "../config";
-
-export const getUsers = async (): Promise<
-  { twitchName: string; sendouId: string }[]
-> => {
-  try {
-    const { data, error } = await supabase
-      .from("users")
-      .select("twitchName, sendouId");
-
-    if (error) throw error;
-
-    return data as { twitchName: string; sendouId: string }[];
-  } catch (error) {
-    console.error("Error fetching registered users:", error);
-    throw error;
-  }
-};
-
-export const getLiveUsers = async (): Promise<
-  { twitchName: string; sendouId: string }[]
-> => {
-  const { NODE_ENV, TWITCH_CLIENT_ID } = config;
-  try {
-    const { data, error } = await supabase
-      .from("users")
-      .select("twitchName, sendouId");
-
-    if (error) throw error;
-    if (!data) return [];
-
-    const token = await getExtensionToken();
-
-    const names = data.map((u) => u.twitchName);
-    if (NODE_ENV !== "production") {
-      console.log("Names: ", names);
-    }
-    if (names.length === 0) return [];
-
-    const userLogins = names.map((u) => `user_login=${u}`).join("&");
-    const url = `https://api.twitch.tv/helix/streams?${userLogins}`;
-
-    const res = await fetch(url, {
-      headers: {
-        "Client-ID": TWITCH_CLIENT_ID!,
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(
-        `Twitch API error: ${res.status} ${res.statusText} - ${JSON.stringify(
-          err
-        )}`
-      );
-    }
-
-    const body: any = await res.json();
-    const liveSet = new Set(body.data.map((stream: any) => stream.user_login));
-
-    return data.filter((user) => liveSet.has(user.twitchName)) as {
-      twitchName: string;
-      sendouId: string;
-    }[];
-  } catch (error) {
-    console.error("Error fetching registered users:", error);
-    throw error;
-  }
-};
 
 export const getExtensionToken = async (): Promise<string> => {
   const REFRESH_BUFFER_SECONDS = 3600;
@@ -108,7 +38,6 @@ export const getExtensionToken = async (): Promise<string> => {
       );
     }
 
-    const client = new Redis(REDIS);
     const data: TokenResponse = (await response.json()) as TokenResponse;
     const ttl = data.expires_in - REFRESH_BUFFER_SECONDS;
     await client.set(OAUTH_TOKEN_KEY, data.access_token, "EX", ttl);
@@ -118,4 +47,24 @@ export const getExtensionToken = async (): Promise<string> => {
     console.error("Failed to get extension token:", error);
     throw new Error("Failed to authenticate with Twitch");
   }
+};
+
+export const sendouFetch = async <T>(endpoint: string): Promise<T> => {
+  const { SINK_ROUTE, SINK_TOKEN } = config;
+
+  const response = await fetch(`${SINK_ROUTE}${endpoint}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${SINK_TOKEN}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(
+      `${endpoint} request failed: ${response.status} - ${response.statusText}`
+    );
+  }
+
+  return (await response.json()) as T;
 };

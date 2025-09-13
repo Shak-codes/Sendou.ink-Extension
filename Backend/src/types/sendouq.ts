@@ -1,4 +1,4 @@
-interface Map {
+interface SendouqMap {
   mode: "SZ" | "RM" | "TC" | "CB" | "TW";
   stage: {
     id: number;
@@ -6,15 +6,15 @@ interface Map {
   };
 }
 
-interface MapResult {
-  map: Map;
+export interface SendouqGame {
+  map: SendouqMap;
   winnerTeamId: number;
   source: string;
   participatedUserIds: null;
   points: null;
 }
 
-interface Player {
+export interface SendouqPlayer {
   userId: number;
   rank: {
     name: string;
@@ -23,13 +23,20 @@ interface Player {
 }
 
 export interface SendouqMatchData {
-  mapList: MapResult[];
+  mapList: SendouqGame[];
   teamAlpha: {
     score: number;
-    players: Player[];
+    players: SendouqPlayer[];
   };
   teamBravo: {
     score: number;
-    players: Player[];
+    players: SendouqPlayer[];
   };
+}
+
+export interface SendouqMatchRef {
+  matchId: number;
+  twitchName: string;
+  twitchId: number;
+  sendouId: number;
 }

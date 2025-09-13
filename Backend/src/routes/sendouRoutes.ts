@@ -19,4 +19,6 @@ router.get("/:discord_id", userRequestLimiter, async (req, res) => {
   }
 });
 
+router.post("/update-matches", userRequestLimiter, async (req, res) => {});
+
 export default router;
