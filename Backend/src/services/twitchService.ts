@@ -1,4 +1,4 @@
-import { getExtensionToken } from "./utils";
+import { getExtensionToken, printLog } from "./utils";
 import config from "../config";
 
 export const getDisplayName = async (channel_id: string): Promise<string> => {
@@ -9,7 +9,7 @@ export const getDisplayName = async (channel_id: string): Promise<string> => {
     throw new Error("Missing Twitch Helix Route");
   }
 
-  console.log(`Route: ${TWITCH_HELIX_ROUTE}?id=${channel_id}`);
+  printLog(`Route: ${TWITCH_HELIX_ROUTE}?id=${channel_id}`);
 
   const response = await fetch(`${TWITCH_HELIX_ROUTE}?id=${channel_id}`, {
     method: "GET",

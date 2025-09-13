@@ -8,7 +8,7 @@ import { SendouUser } from "../types/sendouUser";
 import { RedisPlayer, RedisSendouqMatch } from "../types/redis";
 import { UserRef } from "../types/dbUser";
 import config from "../config";
-import { sendouFetch, getExtensionToken } from "./utils";
+import { sendouFetch, getExtensionToken, printLog } from "./utils";
 
 export const getUsers = async (): Promise<UserRef[]> => {
   try {
@@ -26,7 +26,7 @@ export const getUsers = async (): Promise<UserRef[]> => {
 };
 
 export const getLiveUsers = async (): Promise<UserRef[]> => {
-  const { NODE_ENV, TWITCH_CLIENT_ID } = config;
+  const { TWITCH_CLIENT_ID } = config;
   try {
     const { data, error } = await supabase
       .from("users")
@@ -38,9 +38,7 @@ export const getLiveUsers = async (): Promise<UserRef[]> => {
     const token = await getExtensionToken();
 
     const names = data.map((u) => u.twitchName);
-    if (NODE_ENV !== "production") {
-      console.log("Names: ", names);
-    }
+    printLog(`Names: ${names}`);
     if (names.length === 0) return [];
 
     const userLogins = names.map((u) => `user_login=${u}`).join("&");

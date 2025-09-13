@@ -9,7 +9,7 @@ export const getExtensionToken = async (): Promise<string> => {
   const client = new Redis(REDIS);
   const token = await client.get(OAUTH_TOKEN_KEY);
 
-  console.log("Access Token", token);
+  printLog(`Access Token: ${token}`);
   if (token) return token;
 
   const { TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET, TWITCH_OAUTH_ROUTE } = config;
@@ -67,4 +67,11 @@ export const sendouFetch = async <T>(endpoint: string): Promise<T> => {
   }
 
   return (await response.json()) as T;
+};
+
+export const printLog = (log: string) => {
+  const { NODE_ENV } = config;
+  if (NODE_ENV !== "production") {
+    console.log(log);
+  }
 };

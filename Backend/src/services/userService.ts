@@ -1,5 +1,7 @@
+import config from "../config";
 import { supabase } from "../db";
 import { UserRecord } from "../types";
+import { printLog } from "./utils";
 
 export const getUser = async (twitchId: string): Promise<UserRecord | null> => {
   try {
@@ -35,6 +37,7 @@ export const addUser = async (data: UserRecord): Promise<UserRecord> => {
 };
 
 export const deleteInactiveUsers = async () => {
+  const { NODE_ENV } = config;
   try {
     const { count, error } = await supabase
       .from("users")
@@ -45,7 +48,7 @@ export const deleteInactiveUsers = async () => {
       );
 
     if (error) throw error;
-    console.log(`Deleted ${count} inactive users`);
+    printLog(`Deleted ${count} inactive users`);
     return count ?? 0;
   } catch (error) {
     console.error("Error deleting inactive users:", error);
