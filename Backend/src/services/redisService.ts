@@ -79,7 +79,7 @@ export const getMatches = async (
       {
         twitchName: "5hak_",
         sendouId: 41605,
-        twitchId: 81661426,
+        twitchId: "81661426",
         matchId: 89177,
       },
     ];

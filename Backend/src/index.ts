@@ -4,6 +4,7 @@ import userRoutes from "./routes/userRoutes";
 import twitchRoutes from "./routes/twitchRoutes";
 import sendouRoutes from "./routes/sendouRoutes";
 import discordRoutes from "./routes/discordRoutes";
+import redisRoutes from "./routes/redisRoutes";
 import config from "./config";
 
 const app = express();
@@ -31,6 +32,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/twitch", twitchRoutes);
 app.use("/api/sendou", sendouRoutes);
 app.use("/api/discord", discordRoutes);
+app.use("/api/redis", redisRoutes);
 
 app.listen(Number(PORT), "0.0.0.0", () => {
   console.log(`Server running on http://0.0.0.0:${PORT}`);
