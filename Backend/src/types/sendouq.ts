@@ -37,6 +37,6 @@ export interface SendouqMatchData {
 export interface SendouqMatchRef {
   matchId: number;
   twitchName: string;
-  twitchId: number;
+  twitchId: string;
   sendouId: number;
 }

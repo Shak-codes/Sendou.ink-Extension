@@ -1,8 +1,6 @@
 import express, { Router } from "express";
 import { getDisplayName } from "../services/twitchService";
-import { getLiveUsers } from "../services/utils";
 import { userRequestLimiter } from "../middleware/rateLimiter";
-import config from "../config";
 
 const router: Router = express.Router();
 
@@ -20,17 +18,5 @@ router.get("/name/:channel_id", userRequestLimiter, async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
-
-if (config.NODE_ENV !== "production") {
-  router.get("/live", userRequestLimiter, async (req, res) => {
-    try {
-      const data = await getLiveUsers();
-      res.status(200).json(data);
-    } catch (err: any) {
-      console.error("Error fetching user data:", err);
-      res.status(500).json({ error: "Internal server error" });
-    }
-  });
-}
 
 export default router;
