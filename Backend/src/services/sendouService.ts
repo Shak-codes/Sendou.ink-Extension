@@ -1,15 +1,10 @@
 import { TeamData, SendouData, UserDataResponse } from "../types";
-import dotenv from "dotenv";
-
-if (process.env.NODE_ENV !== "production") {
-  dotenv.config();
-}
+import config from "../config";
 
 export const fetchUserData = async (
   discord_id: string
 ): Promise<UserDataResponse> => {
-  const SINK_ROUTE = process.env.SINK_ROUTE;
-  const SINK_TOKEN = process.env.SINK_TOKEN;
+  const { SINK_ROUTE, SINK_TOKEN } = config;
 
   if (!SINK_ROUTE || !SINK_TOKEN) {
     throw new Error("Missing Sendou credentials");

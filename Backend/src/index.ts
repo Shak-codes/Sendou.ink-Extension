@@ -1,15 +1,10 @@
 import express, { Request } from "express";
 import cors, { CorsOptions, CorsOptionsDelegate } from "cors";
-import dotenv from "dotenv";
 import userRoutes from "./routes/userRoutes";
 import twitchRoutes from "./routes/twitchRoutes";
 import sendouRoutes from "./routes/sendouRoutes";
 import discordRoutes from "./routes/discordRoutes";
-import { send } from "process";
-
-if (process.env.NODE_ENV !== "production") {
-  dotenv.config();
-}
+import config from "./config";
 
 const app = express();
 const allowedOrigins = ["https://y2o9k4bhgfw5zxj64hcf39gn8324hi.ext-twitch.tv"];
@@ -29,14 +24,7 @@ const corsOptionsDelegate: CorsOptionsDelegate<Request> = (
 
 app.use(cors(corsOptionsDelegate));
 
-const rawPort = process.env.PORT;
-if (!rawPort || isNaN(Number(rawPort))) {
-  throw new Error(`❌ Invalid or missing PORT env: "${rawPort}"`);
-}
-
-const PORT = Number(rawPort);
-
-console.log("PORT ENV VALUE:", PORT);
+const { PORT } = config;
 
 app.use(express.json());
 app.use("/api/users", userRoutes);

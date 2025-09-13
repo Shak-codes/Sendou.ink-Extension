@@ -1,12 +1,8 @@
-import dotenv from "dotenv";
 import { DiscordUser } from "./types";
-
-if (process.env.NODE_ENV !== "production") {
-  dotenv.config();
-}
+import config from "../config";
 
 export const getAvatarHash = async (userId: string): Promise<string | null> => {
-  const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
+  const { DISCORD_TOKEN } = config;
   if (!DISCORD_TOKEN) {
     throw new Error("DISCORD_TOKEN is not set in .env");
   }
