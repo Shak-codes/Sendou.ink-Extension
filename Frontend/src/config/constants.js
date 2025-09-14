@@ -22,8 +22,5 @@ export const FIELDS = [
   "sendouName",
   "sendouUrl",
   "avatarUrl",
-  "sqRank",
-  "peakXp",
   "scoringMethod",
-  "team",
 ];
