@@ -76,8 +76,12 @@ export const saveToBackend = async (userData) => {
 };
 
 export const validUserData = (data) => {
+  console.log("Saved data: ", data);
   for (const field of FIELDS) {
-    if (!data[field]) return false;
+    if (!data[field]) {
+      console.log(`Missing ${field}`);
+      return false;
+    }
   }
   return true;
 };
