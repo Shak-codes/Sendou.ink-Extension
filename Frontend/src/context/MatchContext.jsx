@@ -24,8 +24,6 @@ export const MatchProvider = ({ children }) => {
   }, []);
 
   return (
-    <MatchContext.Provider value={{ matchData }}>
-      {children}
-    </MatchContext.Provider>
+    <MatchContext.Provider value={matchData}>{children}</MatchContext.Provider>
   );
 };
