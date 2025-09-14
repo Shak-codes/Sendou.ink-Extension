@@ -1,14 +1,15 @@
 import styles from "./styles.module.scss";
 import { useEffect, useState } from "react";
 import Profile from "../components/Profile/Profile";
-import SendouQ from "./SendouQ/SendouQ";
-import { testData } from "./SendouQ/testData";
+import SendouQ from "./components/SendouQ/SendouQ";
+import { testData } from "./components/SendouQ/testData";
+import ConfigNotFound from "./components/ConfigNotFound/ConfigNotFound";
 
 const Video_Overlay = () => {
   const twitch = window.Twitch.ext;
   const [configData, setConfigData] = useState(null);
   const [display, setDisplay] = useState("profile"); // One of: profile | sendouq | tournament(TBD at a later date)
-  const [displayNav, setDisplaynav] = useState(true);
+  const [displayNav, setDisplayNav] = useState(true);
 
   const selectTab = (tab) => {
     setDisplay(tab);
@@ -22,8 +23,13 @@ const Video_Overlay = () => {
       }
     });
   }, []);
+
+  if (!configData) {
+    return <ConfigNotFound />;
+  }
+
   return (
-    <section className={styles.container}>
+    <main className={styles.container}>
       {displayNav && (
         <header className={styles.navbar}>
           <section
@@ -46,7 +52,7 @@ const Video_Overlay = () => {
       {!!configData && display === "sendouq" && (
         <SendouQ matchData={testData} streamerData={configData} />
       )}
-    </section>
+    </main>
   );
 };
 
