@@ -1,0 +1,29 @@
+@use "../../../styles/colors.scss";
+
+.navbar {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  border-bottom: 1px solid var(--button-active-bg);
+}
+
+.toggle {
+  text-align: center;
+  flex: 1;
+  padding: 2px;
+  background-color: var(--background);
+  transition: background-color 0.2s ease;
+}
+
+.toggle:hover {
+  background-color: var(--button-active-bg);
+}
+
+.toggle h3 {
+  color: var(--text);
+  transition: color 0.2s ease;
+}
+
+.toggle:hover h3 {
+  color: var(--button-active-text);
+}
