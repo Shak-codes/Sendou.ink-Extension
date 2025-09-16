@@ -50,4 +50,26 @@ router.post("/update", userRequestLimiter, async (req, res) => {
   }
 });
 
+router.get("/:twitchId", userRequestLimiter, async (req, res) => {
+  try {
+    const { twitchId } = req.params;
+    const { REDIS } = config;
+    const client = new Redis(REDIS);
+
+    const data = await client.get(`matchData:${twitchId}`);
+
+    await client.quit();
+
+    if (!data) {
+      res.status(404).json({ error: "No match data found" });
+      return;
+    }
+
+    res.json(JSON.parse(data));
+  } catch (error) {
+    console.error("Redis error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 export default router;
