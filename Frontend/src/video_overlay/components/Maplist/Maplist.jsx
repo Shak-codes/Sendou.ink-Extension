@@ -19,7 +19,7 @@ const Maplist = ({ matchData }) => {
   return (
     <section onClick={goToMaps} className={styles.mapContainer}>
       <section
-        className={styles.topRow}
+        className={styles.topMaps}
         style={{
           gridTemplateColumns: `repeat(${columns}, auto)`,
         }}
@@ -47,7 +47,7 @@ const Maplist = ({ matchData }) => {
         })}
       </section>
       <section
-        className={styles.bottomRow}
+        className={styles.bottomMaps}
         style={{
           gridTemplateColumns: `repeat(${bottomMaps.length}, auto)`,
         }}
