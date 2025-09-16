@@ -69,4 +69,9 @@
   border-radius: 50%;
   height: 40px;
   width: 40px;
+  display: inline-block;
+  object-fit: cover;
+  text-align: center;
+  line-height: 40px;
+  overflow: hidden;
 }
