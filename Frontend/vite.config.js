@@ -23,22 +23,36 @@ const zipDistFolder = () => {
       });
 
       archive.pipe(output);
-      archive.directory(path.resolve(__dirname, "dist"), false); // false = flatten dist/
+      archive.directory(path.resolve(__dirname, "dist"), false);
 
       archive.finalize();
     },
   };
 };
 
+const injectTwitchHelper = () => {
+  return {
+    name: "inject-twitch-helper",
+    transformIndexHtml(html) {
+      // Insert Twitch helper before the first Vite module script
+      return html.replace(
+        /(<script type="module".*?src=".*?panel\.js".*?><\/script>)/,
+        `<script src="https://extension-files.twitch.tv/helper/v1/twitch-ext.min.js"></script>\n$1`
+      );
+    },
+  };
+};
+
 export default defineConfig({
   base: "./",
-  plugins: [react(), zipDistFolder()],
+  plugins: [react(), injectTwitchHelper(), zipDistFolder()],
   build: {
     outDir: "dist",
     rollupOptions: {
       input: {
         config: resolve(__dirname, "config.html"),
         video_overlay: resolve(__dirname, "video_overlay.html"),
+        panel: resolve(__dirname, "panel.html"),
       },
       output: {
         entryFileNames: "assets/[name].js",
