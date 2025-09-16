@@ -6,7 +6,7 @@ const MatchContext = createContext();
 export const useMatch = () => useContext(MatchContext);
 
 export const MatchProvider = ({ children }) => {
-  const [matchData, setMatchData] = useState(null);
+  const [matchData, setMatchData] = useState(undefined);
 
   useEffect(() => {
     // fetch("/api/redis/match")
