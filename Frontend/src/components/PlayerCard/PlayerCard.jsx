@@ -1,6 +1,6 @@
 import styles from "./styles.module.scss";
 
-const Profile = ({ userData }) => {
+const PlayerCard = ({ userData }) => {
   console.log("User Data", userData);
   const { sqRank, team } = userData;
   return (
@@ -49,4 +49,4 @@ const Profile = ({ userData }) => {
   );
 };
 
-export default Profile;
+export default PlayerCard;
