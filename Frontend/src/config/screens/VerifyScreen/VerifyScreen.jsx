@@ -1,6 +1,6 @@
 import Button from "../../../components/Button/Button";
 import styles from "./styles.module.scss";
-import Profile from "../../../components/Profile/Profile";
+import PlayerCard from "../../../components/PlayerCard/PlayerCard";
 import { saveToBackend } from "../../utils";
 import manualScoring from "/images/manualScoring.png";
 import lazyScoring from "/images/lazyScoring.png";
@@ -25,7 +25,7 @@ const VerifyScreen = ({ data, actions }) => {
         <h2>Verify</h2>
         <h3>Is the data below correct?</h3>
       </header>
-      <Profile userData={userData} />
+      <PlayerCard userData={userData} />
 
       <section className={styles.scoreMethodContainer}>
         <h4>Scoring Method: {scoringMethod}</h4>

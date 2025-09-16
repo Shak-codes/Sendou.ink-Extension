@@ -1,6 +1,6 @@
 import styles from "./styles.module.scss";
 import Button from "../../../components/Button/Button";
-import Profile from "../../../components/Profile/Profile";
+import PlayerCard from "../../../components/PlayerCard/PlayerCard";
 import manualScoring from "/images/manualScoring.png";
 import lazyScoring from "/images/lazyScoring.png";
 import finalScore from "/images/scoreEnd.png";
@@ -12,7 +12,7 @@ const DetailsScreen = ({ data, resetConfig }) => {
         <h2>Hey there, {data.twitchName}!</h2>
         <h3>Here's your current Sendou.ink data</h3>
       </header>
-      <Profile userData={data} />
+      <PlayerCard userData={data} />
 
       <section className={styles.scoreMethodContainer}>
         <h4>Scoring Method: {data.scoringMethod}</h4>
