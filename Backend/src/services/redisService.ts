@@ -144,16 +144,34 @@ export const getMatchData = async (
       matchDetails.teamBravo.players.map(enrichPlayer)
     );
 
+    const teamIds = {
+      Alpha: 0,
+      Bravo: 0,
+    };
+
+    for (const game of matchDetails.mapList) {
+      if (typeof game.source === "number" && !teamIds.Alpha) {
+        teamIds.Alpha = game.source;
+      } else if (typeof game.source === "number") {
+        teamIds.Bravo = game.source;
+        break;
+      }
+    }
+
     return {
       ...matchDetails,
       teamAlpha: {
+        id: teamIds.Alpha,
         ...matchDetails.teamAlpha,
         players: enrichedAlpha,
       },
       teamBravo: {
+        id: teamIds.Bravo,
         ...matchDetails.teamBravo,
         players: enrichedBravo,
       },
+      confirmed:
+        matchDetails.teamBravo.score + matchDetails.teamAlpha.score === 7,
     };
   } catch (error) {
     console.error(`Error fetching match ${userMatch.matchId}: `, error);

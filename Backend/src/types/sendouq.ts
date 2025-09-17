@@ -9,7 +9,7 @@ interface SendouqMap {
 export interface SendouqGame {
   map: SendouqMap;
   winnerTeamId: number;
-  source: string;
+  source: number | string;
   participatedUserIds: null;
   points: null;
 }

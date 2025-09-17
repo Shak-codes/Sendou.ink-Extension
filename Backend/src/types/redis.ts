@@ -13,11 +13,14 @@ export interface RedisPlayer {
 export interface RedisSendouqMatch {
   mapList: SendouqGame[];
   teamAlpha: {
+    id: number;
     score: number;
     players: RedisPlayer[];
   };
   teamBravo: {
+    id: number;
     score: number;
     players: RedisPlayer[];
   };
+  confirmed: boolean;
 }
